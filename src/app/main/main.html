@@ -1,0 +1,73 @@
+<div class="main-wrapper">
+  <div class="header">
+    <h1>Stock General</h1>
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon" *ngIf="!busqueda">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Buscar Producto" 
+          [(ngModel)]="busqueda"
+          class="search-input"
+        >
+      </div>
+      <button class="filter-button" (click)="toggleFiltro()">
+        <span class="material-icons">filter_list</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú de filtros desplegable -->
+  <div class="filter-menu" *ngIf="mostrarFiltro">
+    <h3>Filtrar por:</h3>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="todos" name="filtro">
+      Todos los campos
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="codigo" name="filtro">
+      Código de Barras
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="nombre" name="filtro">
+      Nombre del Producto
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="proveedor" name="filtro">
+      Proveedor
+    </label>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Codigo de Barras</th>
+          <th>Nombre del producto</th>
+          <th>Caracteristicas</th>
+          <th>Precio</th>
+          <th>Existencias</th>
+          <th>Proveedor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of filtrarProductos()">
+          <td>
+            <img 
+              [src]="producto.imagen || 'https://via.placeholder.com/60x60?text=Sin+Imagen'" 
+              alt="Producto"
+              class="product-image"
+            >
+          </td>
+          <td>{{ producto.codigo }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.caracteristicas }}</td>
+          <td>{{ producto.precio }}</td>
+          <td>{{ producto.stock }}</td>
+          <td>{{ producto.proveedor }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

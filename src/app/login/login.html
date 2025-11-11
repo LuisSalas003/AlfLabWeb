@@ -1,0 +1,33 @@
+<div class="login-wrapper">
+  <div class="login-box">
+    <h2>Bienvenido</h2>
+
+    <form (ngSubmit)="login()">
+      <div class="input-group">
+        <span class="icon">👤</span>
+        <input 
+          type="text" 
+          placeholder="Username" 
+          [(ngModel)]="usuario" 
+          name="usuario"
+          required
+        >
+      </div>
+
+      <div class="input-group">
+        <span class="icon">🔒</span>
+        <input 
+          type="password" 
+          placeholder="Password" 
+          [(ngModel)]="password" 
+          name="password"
+          required
+        >
+      </div>
+
+      <a class="forgot-link" href="#" type="button">Olvidé mi contraseña</a>
+
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+  </div>
+</div>
