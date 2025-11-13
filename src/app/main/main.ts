@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './main.html',
   styleUrls: ['./main.css']
 })
@@ -13,6 +14,7 @@ export class MainComponent {
   busqueda = '';
   filtroSeleccionado = 'todos';
   mostrarFiltro = false;
+  menuAbierto = false;
   
   productos = [
     { 
@@ -61,6 +63,10 @@ export class MainComponent {
       imagen: 'https://via.placeholder.com/60x60?text=Mechero'
     }
   ];
+
+  toggleMenu() {
+    this.menuAbierto = !this.menuAbierto;
+  }
 
   toggleFiltro() {
     this.mostrarFiltro = !this.mostrarFiltro;

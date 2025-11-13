@@ -1,5 +1,9 @@
 <div class="main-wrapper">
-  <div class="header">
+  <!-- Encabezado con fondo oscuro -->
+  <div class="top-header">
+    <button class="menu-button" (click)="toggleMenu()">
+      <span class="material-symbols-outlined">dehaze</span>
+    </button>
     <h1>Stock General</h1>
     <div class="search-container">
       <div class="search-box">
@@ -16,6 +20,47 @@
       </button>
     </div>
   </div>
+
+  <!-- Menú lateral desplegable -->
+  <div class="sidebar-menu" [class.open]="menuAbierto">
+    <div class="menu-header">
+      <h2>Menú</h2>
+      <button class="close-button" (click)="toggleMenu()">✕</button>
+    </div>
+    <nav class="menu-nav">
+      <a routerLink="/main" class="menu-item active">
+        <span class="material-icons">inventory_2</span>
+        Stock General
+      </a>
+      <a routerLink="/productos" class="menu-item">
+        <span class="material-icons">shopping_cart</span>
+        Productos
+      </a>
+      <a routerLink="/proveedores" class="menu-item">
+        <span class="material-icons">local_shipping</span>
+        Proveedores
+      </a>
+      <a routerLink="/categorias" class="menu-item">
+        <span class="material-icons">category</span>
+        Categorías
+      </a>
+      <a routerLink="/reportes" class="menu-item">
+        <span class="material-icons">assessment</span>
+        Reportes
+      </a>
+      <a routerLink="/configuracion" class="menu-item">
+        <span class="material-icons">settings</span>
+        Configuración
+      </a>
+      <a routerLink="/login" class="menu-item logout">
+        <span class="material-icons">logout</span>
+        Cerrar Sesión
+      </a>
+    </nav>
+  </div>
+
+  <!-- Overlay para cerrar el menú al hacer clic fuera -->
+  <div class="menu-overlay" *ngIf="menuAbierto" (click)="toggleMenu()"></div>
 
   <!-- Menú de filtros desplegable -->
   <div class="filter-menu" *ngIf="mostrarFiltro">
@@ -38,36 +83,39 @@
     </label>
   </div>
 
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Imagen</th>
-          <th>Codigo de Barras</th>
-          <th>Nombre del producto</th>
-          <th>Caracteristicas</th>
-          <th>Precio</th>
-          <th>Existencias</th>
-          <th>Proveedor</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let producto of filtrarProductos()">
-          <td>
-            <img 
-              [src]="producto.imagen || 'https://via.placeholder.com/60x60?text=Sin+Imagen'" 
-              alt="Producto"
-              class="product-image"
-            >
-          </td>
-          <td>{{ producto.codigo }}</td>
-          <td>{{ producto.nombre }}</td>
-          <td>{{ producto.caracteristicas }}</td>
-          <td>{{ producto.precio }}</td>
-          <td>{{ producto.stock }}</td>
-          <td>{{ producto.proveedor }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Contenido principal -->
+  <div class="content-area">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Codigo de Barras</th>
+            <th>Nombre del producto</th>
+            <th>Caracteristicas</th>
+            <th>Precio</th>
+            <th>Existencias</th>
+            <th>Proveedor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of filtrarProductos()">
+            <td>
+              <img 
+                [src]="producto.imagen || 'https://via.placeholder.com/60x60?text=Sin+Imagen'" 
+                alt="Producto"
+                class="product-image"
+              >
+            </td>
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.caracteristicas }}</td>
+            <td>{{ producto.precio }}</td>
+            <td>{{ producto.stock }}</td>
+            <td>{{ producto.proveedor }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
