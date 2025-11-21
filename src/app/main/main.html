@@ -110,7 +110,7 @@
             <td>{{ producto.codigo }}</td>
             <td>{{ producto.nombre }}</td>
             <td>{{ producto.caracteristicas }}</td>
-            <td>{{ producto.precio }}</td>
+            <td>${{ producto.precio.toLocaleString('es-MX') }}</td> 
             <td>{{ producto.stock }}</td>
             <td>{{ producto.proveedor }}</td>
           </tr>
