@@ -4,13 +4,15 @@
 
     <form (ngSubmit)="login()">
       <div class="input-group">
-        <span class="icon">👤</span>
+        <span class="icon">📧</span>
         <input 
-          type="text" 
-          placeholder="Username" 
-          [(ngModel)]="usuario" 
-          name="usuario"
+          type="email" 
+          placeholder="Email" 
+          [(ngModel)]="email" 
+          name="email"
           required
+          [disabled]="isLoading()"
+          autocomplete="email"
         >
       </div>
 
@@ -22,12 +24,28 @@
           [(ngModel)]="password" 
           name="password"
           required
+          [disabled]="isLoading()"
+          autocomplete="current-password"
         >
       </div>
 
       <a class="forgot-link" href="#" type="button">Olvidé mi contraseña</a>
 
-      <button type="submit">Iniciar Sesión</button>
+      <button type="submit" [disabled]="isLoading()">
+        {{ isLoading() ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+      </button>
     </form>
   </div>
+
+  <!-- MODAL DE ERROR -->
+  @if (showErrorModal()) {
+    <div class="modal-overlay" (click)="closeErrorModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-icon">❌</div>
+        <h3>Error de inicio de sesión</h3>
+        <p>{{ errorMessage() }}</p>
+        <button class="modal-button" (click)="closeErrorModal()">Aceptar</button>
+      </div>
+    </div>
+  }
 </div>
