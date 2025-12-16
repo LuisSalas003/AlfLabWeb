@@ -13,9 +13,10 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "docs",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "outputPath": "docs",
+            "baseHref": "/AlfLabWeb/",
             "assets": [
               {
                 "glob": "**/*",
