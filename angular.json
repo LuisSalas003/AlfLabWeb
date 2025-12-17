@@ -15,14 +15,23 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "appShell": false,
             "outputPath": "docs",
             "baseHref": "/AlfLabWeb/",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
+                {
+                  "glob": "**/*",
+                  "input": "public"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "src/assets"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "src"
+                }
+              ],
             "styles": [
               "src/styles.css"
             ]

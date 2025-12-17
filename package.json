@@ -5,9 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "postbuild": "powershell -Command \"Copy-Item -Recurse -Force docs/browser/* docs/; Remove-Item -Recurse -Force docs/browser\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
-  },
+    },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
