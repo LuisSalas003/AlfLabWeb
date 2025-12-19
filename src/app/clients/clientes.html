@@ -1,0 +1,255 @@
+<div class="main-wrapper">
+  <!-- Encabezado -->
+  <div class="top-header">
+    <button class="menu-button" (click)="toggleMenu()">
+      <span class="material-symbols-outlined">dehaze</span>
+    </button>
+    <h1>Gestión de Clientes</h1>
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon" *ngIf="!busqueda">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Buscar Cliente" 
+          [(ngModel)]="busqueda"
+          class="search-input"
+        >
+      </div>
+      <button class="filter-button" (click)="toggleFiltro()">
+        <span class="material-icons">filter_list</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú lateral -->
+  <div class="sidebar-menu" [class.open]="menuAbierto">
+    <div class="menu-header">
+      <h2>Menú</h2>
+      <button class="close-button" (click)="toggleMenu()">✕</button>
+    </div>
+    <nav class="menu-nav">
+      <a routerLink="/main" class="menu-item">
+        <span class="material-icons">inventory_2</span>
+        Stock General
+      </a>
+      <a routerLink="/productos" class="menu-item">
+        <span class="material-icons">shopping_cart</span>
+        Productos
+      </a>
+      <a routerLink="/proveedores" class="menu-item">
+        <span class="material-icons">local_shipping</span>
+        Proveedores
+      </a>
+      <a routerLink="/clientes" class="menu-item active">
+        <span class="material-icons">people</span>
+        Clientes
+      </a>
+      <a routerLink="/cotizaciones" class="menu-item">
+        <span class="material-icons">description</span>
+        Cotizaciones
+      </a>
+      <a routerLink="/reportes" class="menu-item">
+        <span class="material-icons">assessment</span>
+        Reportes
+      </a>
+      <a routerLink="/configuracion" class="menu-item">
+        <span class="material-icons">settings</span>
+        Configuración
+      </a>
+      <a routerLink="/login" class="menu-item logout">
+        <span class="material-icons">logout</span>
+        Cerrar Sesión
+      </a>
+    </nav>
+  </div>
+
+  <!-- Overlay del menú -->
+  <div class="menu-overlay" *ngIf="menuAbierto" (click)="toggleMenu()"></div>
+
+  <!-- Menú de filtros -->
+  <div class="filter-menu" *ngIf="mostrarFiltro">
+    <h3>Filtrar por:</h3>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="todos" name="filtro">
+      Todos los campos
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="nombre" name="filtro">
+      Nombre
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="empresa" name="filtro">
+      Empresa
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="filtroSeleccionado" value="email" name="filtro">
+      Email
+    </label>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="content-area">
+    <!-- Botón agregar -->
+    <div class="action-bar">
+      <button class="btn-primary" (click)="abrirModalAgregar()">
+        <span class="material-icons">add</span>
+        Agregar Cliente
+      </button>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="isLoading()" class="loading-indicator">
+      <p>Cargando clientes...</p>
+    </div>
+
+    <!-- Tabla de clientes -->
+    <div class="table-container" *ngIf="!isLoading()">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Empresa</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of filtrarClientes()">
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.empresa }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.direccion }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-edit" (click)="abrirModalEditar(cliente)" title="Editar">
+                  <span class="material-icons">edit</span>
+                </button>
+                <button class="btn-delete" (click)="confirmarEliminar(cliente.id)" title="Eliminar">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filtrarClientes().length === 0">
+            <td colspan="6" style="text-align: center; padding: 40px; color: white;">
+              No se encontraron clientes
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL AGREGAR/EDITAR -->
+  @if (showModal()) {
+    <div class="modal-overlay-centered">
+      <div class="modal-content-large">
+        <div class="modal-header">
+          <h2>{{ modoEdicion() ? 'Editar Cliente' : 'Agregar Cliente' }}</h2>
+          <button class="close-button" (click)="intentarCerrarModal()" type="button">✕</button>
+        </div>
+
+        <form class="product-form" (ngSubmit)="guardarCliente()">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="clienteActual.nombre" 
+                name="nombre"
+                placeholder="Ej: Juan Pérez"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Empresa</label>
+              <input 
+                type="text" 
+                [(ngModel)]="clienteActual.empresa" 
+                name="empresa"
+                placeholder="Ej: ITD"
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input 
+                type="tel" 
+                [(ngModel)]="clienteActual.telefono" 
+                name="telefono"
+                placeholder="Ej: +52 814 3030"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>E-mail</label>
+              <input 
+                type="email" 
+                [(ngModel)]="clienteActual.email" 
+                name="email"
+                placeholder="Ej: pepito@gmail.com"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Dirección</label>
+            <textarea 
+              [(ngModel)]="clienteActual.direccion" 
+              name="direccion"
+              placeholder="Ej: París, Francia"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="intentarCerrarModal()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary" [disabled]="isLoading()">
+              {{ isLoading() ? 'Guardando...' : (modoEdicion() ? 'Actualizar' : 'Guardar') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL CONFIRMAR CERRAR SIN GUARDAR -->
+  @if (showConfirmCloseModal()) {
+    <div class="modal-overlay-centered" style="z-index: 1100;">
+      <div class="modal-content-warning">
+        <div class="modal-icon">⚠️</div>
+        <h3>¿Descartar cambios?</h3>
+        <p>Tienes cambios sin guardar. Si cierras ahora, se perderán todos los datos ingresados.</p>
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="cancelarCerrar()">Continuar editando</button>
+          <button class="btn-danger" (click)="confirmarCerrarSinGuardar()">Descartar cambios</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL CONFIRMAR ELIMINACIÓN -->
+  @if (showConfirmModal()) {
+    <div class="modal-overlay-centered">
+      <div class="modal-content-warning">
+        <div class="modal-icon">⚠️</div>
+        <h3>Confirmar eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="cancelarEliminar()">Cancelar</button>
+          <button class="btn-danger" (click)="eliminarCliente()" [disabled]="isLoading()">
+            {{ isLoading() ? 'Eliminando...' : 'Eliminar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

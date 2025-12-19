@@ -20,8 +20,12 @@ export const routes: Routes = [
   },
   { 
     path: 'proveedores', 
-    redirectTo: '/main' 
+    loadComponent: () => import('./suppliers/proveedores').then(m => m.ProveedoresComponent) 
   },
+  { 
+  path: 'clientes', 
+  loadComponent: () => import('./clients/clientes').then(m => m.ClientesComponent)
+},
   { 
     path: 'categorias', 
     redirectTo: '/main' 
@@ -33,5 +37,9 @@ export const routes: Routes = [
   { 
     path: 'configuracion', 
     redirectTo: '/main' 
-  }
+  },
+  { 
+  path: 'proveedores', 
+  loadComponent: () => import('./suppliers/proveedores').then(m => m.ProveedoresComponent)
+  },
 ];
