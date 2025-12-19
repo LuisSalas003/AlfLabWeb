@@ -8,7 +8,7 @@
     "postbuild": "powershell -Command \"Copy-Item -Recurse -Force docs/browser/* docs/; Remove-Item -Recurse -Force docs/browser\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
-    },
+  },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
@@ -31,6 +31,9 @@
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "firebase": "^12.6.0",
+    "next": "^16.1.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
