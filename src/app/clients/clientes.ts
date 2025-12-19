@@ -99,40 +99,74 @@ export class ClientesComponent implements OnInit {
   }
 
   async guardarCliente() {
-    // Validaciones
-    if (!this.clienteActual.nombre) {
-      alert('Por favor completa el campo obligatorio: Nombre');
-      return;
-    }
+  // Limpiar espacios en blanco
+  this.clienteActual.nombre = this.clienteActual.nombre.trim();
+  this.clienteActual.empresa = this.clienteActual.empresa.trim();
+  this.clienteActual.telefono = this.clienteActual.telefono.trim();
+  this.clienteActual.email = this.clienteActual.email.trim();
+  this.clienteActual.direccion = this.clienteActual.direccion.trim();
 
-    // Validar email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (this.clienteActual.email && !emailRegex.test(this.clienteActual.email)) {
-      alert('Por favor ingresa un email válido');
-      return;
-    }
+  // Validaciones de campos obligatorios
+  if (!this.clienteActual.nombre) {
+    alert('⚠️ El campo "Nombre" es obligatorio');
+    return;
+  }
 
-    this.isLoading.set(true);
+  if (!this.clienteActual.empresa) {
+    alert('⚠️ El campo "Empresa" es obligatorio');
+    return;
+  }
 
-    let resultado;
-    if (this.modoEdicion() && this.clienteActual.id) {
-      resultado = await this.clienteService.actualizarCliente(
-        this.clienteActual.id,
-        this.clienteActual
-      );
-    } else {
-      resultado = await this.clienteService.agregarCliente(this.clienteActual);
-    }
+  if (!this.clienteActual.telefono) {
+    alert('⚠️ El campo "Teléfono" es obligatorio');
+    return;
+  }
 
-    this.isLoading.set(false);
+  if (!this.clienteActual.email) {
+    alert('⚠️ El campo "Email" es obligatorio');
+    return;
+  }
 
-    if (resultado.success) {
-      alert(this.modoEdicion() ? 'Cliente actualizado exitosamente' : 'Cliente agregado exitosamente');
-      this.cerrarModal();
-      await this.cargarClientes();
-    } else {
-      alert('Error: ' + resultado.error);
-    }
+  if (!this.clienteActual.direccion) {
+    alert('⚠️ El campo "Dirección" es obligatorio');
+    return;
+  }
+
+  // Validar email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(this.clienteActual.email)) {
+    alert('⚠️ Por favor ingresa un email válido (ejemplo: usuario@dominio.com)');
+    return;
+  }
+
+  // Validar teléfono (debe tener al menos 10 dígitos)
+  const telefonoLimpio = this.clienteActual.telefono.replace(/\D/g, '');
+  if (telefonoLimpio.length < 10) {
+    alert('⚠️ El teléfono debe tener al menos 10 dígitos');
+    return;
+  }
+
+  this.isLoading.set(true);
+
+  let resultado;
+  if (this.modoEdicion() && this.clienteActual.id) {
+    resultado = await this.clienteService.actualizarCliente(
+      this.clienteActual.id,
+      this.clienteActual
+    );
+  } else {
+    resultado = await this.clienteService.agregarCliente(this.clienteActual);
+  }
+
+  this.isLoading.set(false);
+
+  if (resultado.success) {
+    alert('✅ ' + (this.modoEdicion() ? 'Cliente actualizado exitosamente' : 'Cliente agregado exitosamente'));
+    this.cerrarModal();
+    await this.cargarClientes();
+  } else {
+    alert('❌ Error: ' + resultado.error);
+  }
   }
 
   confirmarEliminar(id: string | undefined) {

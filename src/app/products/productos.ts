@@ -110,38 +110,71 @@ export class ProductosComponent implements OnInit {
   }
 
   async guardarProducto() {
-    if (!this.productoActual.nombre || !this.productoActual.codigo) {
-      alert('Por favor completa los campos obligatorios: Nombre y Código');
-      return;
-    }
+  // Limpiar espacios en blanco
+  this.productoActual.nombre = this.productoActual.nombre.trim();
+  this.productoActual.codigo = this.productoActual.codigo.trim();
+  this.productoActual.caracteristicas = this.productoActual.caracteristicas.trim();
+  this.productoActual.proveedor = this.productoActual.proveedor.trim();
 
-    if (this.productoActual.precio < 0 || this.productoActual.stock < 0) {
-      alert('El precio y stock deben ser números positivos');
-      return;
-    }
-
-    this.isLoading.set(true);
-
-    let resultado;
-    if (this.modoEdicion() && this.productoActual.id) {
-      resultado = await this.productoService.actualizarProducto(
-        this.productoActual.id,
-        this.productoActual
-      );
-    } else {
-      resultado = await this.productoService.agregarProducto(this.productoActual);
-    }
-
-    this.isLoading.set(false);
-
-    if (resultado.success) {
-      alert(this.modoEdicion() ? 'Producto actualizado exitosamente' : 'Producto agregado exitosamente');
-      this.cerrarModal();
-      await this.cargarProductos();
-    } else {
-      alert('Error: ' + resultado.error);
-    }
+  // Validaciones de campos obligatorios
+  if (!this.productoActual.nombre) {
+    alert('⚠️ El campo "Nombre" es obligatorio');
+    return;
   }
+
+  if (!this.productoActual.codigo) {
+    alert('⚠️ El campo "Código" es obligatorio');
+    return;
+  }
+
+  if (!this.productoActual.caracteristicas) {
+    alert('⚠️ El campo "Características" es obligatorio');
+    return;
+  }
+
+  if (!this.productoActual.proveedor) {
+    alert('⚠️ El campo "Proveedor" es obligatorio');
+    return;
+  }
+
+  // Validar números
+  if (this.productoActual.precio <= 0) {
+    alert('⚠️ El precio debe ser mayor a 0');
+    return;
+  }
+
+  if (this.productoActual.stock < 0) {
+    alert('⚠️ El stock no puede ser negativo');
+    return;
+  }
+
+  // Validar imagen (opcional pero si se ingresa debe ser válida)
+  if (this.productoActual.imagen && this.productoActual.imagen.trim() === '') {
+    this.productoActual.imagen = '';
+  }
+
+  this.isLoading.set(true);
+
+  let resultado;
+  if (this.modoEdicion() && this.productoActual.id) {
+    resultado = await this.productoService.actualizarProducto(
+      this.productoActual.id,
+      this.productoActual
+    );
+  } else {
+    resultado = await this.productoService.agregarProducto(this.productoActual);
+  }
+
+  this.isLoading.set(false);
+
+  if (resultado.success) {
+    alert('✅ ' + (this.modoEdicion() ? 'Producto actualizado exitosamente' : 'Producto agregado exitosamente'));
+    this.cerrarModal();
+    await this.cargarProductos();
+  } else {
+    alert('❌ Error: ' + resultado.error);
+  }
+}
 
   confirmarEliminar(id: string | undefined) {
     if (!id) return;

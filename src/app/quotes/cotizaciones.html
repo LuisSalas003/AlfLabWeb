@@ -1,0 +1,373 @@
+<div class="main-wrapper">
+  <!-- Encabezado -->
+  <div class="top-header">
+    <button class="menu-button" (click)="toggleMenu()">
+      <span class="material-symbols-outlined">dehaze</span>
+    </button>
+    <h1>{{ vistaActual === 'lista' ? 'Gestión de Cotizaciones' : 'Nueva Cotización' }}</h1>
+    <div class="search-container" *ngIf="vistaActual === 'lista'">
+      <div class="search-box">
+        <span class="search-icon" *ngIf="!busqueda">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Buscar por cliente" 
+          [(ngModel)]="busqueda"
+          class="search-input"
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú lateral -->
+  <div class="sidebar-menu" [class.open]="menuAbierto">
+    <div class="menu-header">
+      <h2>Menú</h2>
+      <button class="close-button" (click)="toggleMenu()">✕</button>
+    </div>
+    <nav class="menu-nav">
+      <a routerLink="/main" class="menu-item">
+        <span class="material-icons">inventory_2</span>
+        Stock General
+      </a>
+      <a routerLink="/productos" class="menu-item">
+        <span class="material-icons">shopping_cart</span>
+        Productos
+      </a>
+      <a routerLink="/proveedores" class="menu-item">
+        <span class="material-icons">local_shipping</span>
+        Proveedores
+      </a>
+      <a routerLink="/clientes" class="menu-item">
+        <span class="material-icons">people</span>
+        Clientes
+      </a>
+      <a routerLink="/cotizaciones" class="menu-item active">
+        <span class="material-icons">description</span>
+        Cotizaciones
+      </a>
+      <a routerLink="/reportes" class="menu-item">
+        <span class="material-icons">assessment</span>
+        Reportes
+      </a>
+      <a routerLink="/configuracion" class="menu-item">
+        <span class="material-icons">settings</span>
+        Configuración
+      </a>
+      <a routerLink="/login" class="menu-item logout">
+        <span class="material-icons">logout</span>
+        Cerrar Sesión
+      </a>
+    </nav>
+  </div>
+
+  <!-- Overlay del menú -->
+  <div class="menu-overlay" *ngIf="menuAbierto" (click)="toggleMenu()"></div>
+
+  <!-- VISTA: LISTA DE COTIZACIONES -->
+  <div class="content-area" *ngIf="vistaActual === 'lista'">
+    <!-- Botón nueva cotización -->
+    <div class="action-bar">
+      <button class="btn-primary" (click)="mostrarNuevaCotizacion()">
+        <span class="material-icons">add</span>
+        Nueva Cotización
+      </button>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="isLoading()" class="loading-indicator">
+      <p>Cargando cotizaciones...</p>
+    </div>
+
+    <!-- Tabla de cotizaciones -->
+    <div class="table-container" *ngIf="!isLoading()">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Empresa</th>
+            <th>Productos</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cotizacion of filtrarCotizaciones()">
+            <td>{{ cotizacion.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>{{ cotizacion.clienteNombre }}</td>
+            <td>{{ cotizacion.clienteEmpresa }}</td>
+            <td>{{ cotizacion.productos.length }} producto(s)</td>
+            <td>${{ cotizacion.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
+            <td>
+              <span class="estado-badge" [class.pendiente]="cotizacion.estado === 'pendiente'">
+                {{ cotizacion.estado || 'pendiente' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-view" (click)="verDetalle(cotizacion)" title="Ver detalle">
+                  <span class="material-icons">visibility</span>
+                </button>
+                <button class="btn-delete" (click)="confirmarEliminar(cotizacion.id)" title="Eliminar">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filtrarCotizaciones().length === 0">
+            <td colspan="7" style="text-align: center; padding: 40px; color: white;">
+              No se encontraron cotizaciones
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VISTA: NUEVA COTIZACIÓN -->
+  <div class="content-area cotizacion-nueva" *ngIf="vistaActual === 'nueva'">
+    <!-- Botón volver -->
+    <div class="action-bar">
+      <button class="btn-secondary" (click)="mostrarListaCotizaciones()">
+        <span class="material-icons">arrow_back</span>
+        Volver a la lista
+      </button>
+    </div>
+
+    <div class="cotizacion-grid">
+      <!-- Panel izquierdo: Selección -->
+      <div class="panel-seleccion">
+        <!-- Seleccionar Cliente -->
+        <div class="seccion-card">
+          <h3>1. Seleccionar Cliente *</h3>
+          <select 
+            [(ngModel)]="clienteSeleccionado" 
+            (change)="seleccionarCliente($any($event.target).value)"
+            class="select-cliente"
+          >
+            <option value="">-- Selecciona un cliente --</option>
+            <option *ngFor="let cliente of clientes()" [value]="cliente.id">
+              {{ cliente.nombre }} - {{ cliente.empresa }}
+            </option>
+          </select>
+
+          <div class="cliente-info" *ngIf="clienteSeleccionado">
+            <p><strong>Cliente:</strong> {{ clienteSeleccionado.nombre }}</p>
+            <p><strong>Empresa:</strong> {{ clienteSeleccionado.empresa }}</p>
+            <p><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
+          </div>
+        </div>
+
+        <!-- Agregar Productos -->
+        <div class="seccion-card">
+          <h3>2. Agregar Productos *</h3>
+          <div class="agregar-producto-form">
+            <div class="form-group">
+              <label>Producto</label>
+              <select 
+                [(ngModel)]="productoSeleccionadoId" 
+                class="select-producto"
+              >
+                <option value="">-- Selecciona un producto --</option>
+                <option *ngFor="let producto of productos()" [value]="producto.id">
+                  {{ producto.nombre }} - ${{ producto.precio.toLocaleString('es-MX') }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group cantidad-group">
+              <label>Cantidad</label>
+              <input 
+                type="number" 
+                [(ngModel)]="cantidadProducto" 
+                min="1"
+                class="input-cantidad"
+              >
+            </div>
+
+            <button 
+              type="button" 
+              class="btn-agregar-producto" 
+              (click)="agregarProductoAlCarrito()"
+            >
+              <span class="material-icons">add_shopping_cart</span>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel derecho: Carrito -->
+      <div class="panel-carrito">
+        <div class="seccion-card carrito-card">
+          <h3>Carrito de Cotización</h3>
+
+          <div class="carrito-vacio" *ngIf="carrito().length === 0">
+            <span class="material-icons">shopping_cart</span>
+            <p>No hay productos en el carrito</p>
+          </div>
+
+          <div class="carrito-lista" *ngIf="carrito().length > 0">
+            <div class="carrito-item" *ngFor="let item of carrito(); let i = index">
+              <div class="item-info">
+                <h4>{{ item.nombre }}</h4>
+                <p class="item-detalles">
+                  <span>Código: {{ item.codigo }}</span>
+                  <span>Proveedor: {{ item.proveedor }}</span>
+                </p>
+                <p class="item-precio">
+                  Precio unitario: ${{ item.precio.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
+                </p>
+              </div>
+
+              <div class="item-cantidad">
+                <label>Cantidad:</label>
+                <input 
+                  type="number" 
+                  [value]="item.cantidad" 
+                  (change)="actualizarCantidad(i, +$any($event.target).value)"
+                  min="1"
+                  class="input-cantidad-small"
+                >
+              </div>
+
+              <div class="item-subtotal">
+                <p class="subtotal-label">Subtotal:</p>
+                <p class="subtotal-valor">${{ item.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</p>
+              </div>
+
+              <button 
+                class="btn-eliminar-item" 
+                (click)="eliminarDelCarrito(i)"
+                title="Eliminar"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="carrito-total" *ngIf="carrito().length > 0">
+            <div class="total-row">
+              <span class="total-label">TOTAL:</span>
+              <span class="total-valor">${{ calcularTotal().toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</span>
+            </div>
+          </div>
+
+          <!-- Botón generar -->
+          <button 
+            class="btn-generar-cotizacion" 
+            (click)="generarCotizacion()"
+            [disabled]="!clienteSeleccionado || carrito().length === 0 || isLoading()"
+          >
+            <span class="material-icons">receipt_long</span>
+            {{ isLoading() ? 'Generando...' : 'Generar Cotización' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DETALLE COTIZACIÓN -->
+  @if (showDetalleModal() && cotizacionDetalle) {
+    <div class="modal-overlay-centered">
+      <div class="modal-content-large modal-detalle">
+        <div class="modal-header">
+          <h2>Detalle de Cotización</h2>
+          <button class="close-button" (click)="cerrarDetalle()" type="button">✕</button>
+        </div>
+
+        <div class="detalle-content">
+          <!-- Información del cliente -->
+          <div class="detalle-seccion">
+            <h3>Información del Cliente</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Cliente:</span>
+                <span class="info-valor">{{ cotizacionDetalle.clienteNombre }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Empresa:</span>
+                <span class="info-valor">{{ cotizacionDetalle.clienteEmpresa }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Fecha:</span>
+                <span class="info-valor">{{ cotizacionDetalle.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Estado:</span>
+                <span class="estado-badge" [class.pendiente]="cotizacionDetalle.estado === 'pendiente'">
+                  {{ cotizacionDetalle.estado || 'pendiente' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Productos -->
+          <div class="detalle-seccion">
+            <h3>Productos Cotizados</h3>
+            <table class="tabla-detalle">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Código</th>
+                  <th>Proveedor</th>
+                  <th>Precio Unit.</th>
+                  <th>Cantidad</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let prod of cotizacionDetalle.productos">
+                  <td>{{ prod.nombre }}</td>
+                  <td>{{ prod.codigo }}</td>
+                  <td>{{ prod.proveedor }}</td>
+                  <td>${{ prod.precio.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
+                  <td>{{ prod.cantidad }}</td>
+                  <td>${{ prod.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="5" class="total-label">TOTAL:</td>
+                  <td class="total-valor">
+                    ${{ cotizacionDetalle.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Acciones -->
+          <div class="detalle-acciones">
+            <button class="btn-secondary" (click)="cerrarDetalle()">
+              Cerrar
+            </button>
+            <button class="btn-primary" (click)="imprimirCotizacion(cotizacionDetalle)">
+              <span class="material-icons">print</span>
+              Imprimir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL CONFIRMAR ELIMINACIÓN -->
+  @if (showConfirmModal()) {
+    <div class="modal-overlay-centered">
+      <div class="modal-content-warning">
+        <div class="modal-icon">⚠️</div>
+        <h3>Confirmar eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar esta cotización? Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="cancelarEliminar()">Cancelar</button>
+          <button class="btn-danger" (click)="eliminarCotizacion()" [disabled]="isLoading()">
+            {{ isLoading() ? 'Eliminando...' : 'Eliminar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

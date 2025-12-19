@@ -101,41 +101,93 @@ export class ProveedoresComponent implements OnInit {
   }
 
   async guardarProveedor() {
-    // Validaciones
-    if (!this.proveedorActual.nombre || !this.proveedorActual.empresa) {
-      alert('Por favor completa los campos obligatorios: Nombre y Empresa');
-      return;
-    }
+  // Limpiar espacios en blanco
+  this.proveedorActual.nombre = this.proveedorActual.nombre.trim();
+  this.proveedorActual.empresa = this.proveedorActual.empresa.trim();
+  this.proveedorActual.telefono = this.proveedorActual.telefono.trim();
+  this.proveedorActual.email = this.proveedorActual.email.trim();
+  this.proveedorActual.rfc = this.proveedorActual.rfc.trim();
+  this.proveedorActual.pais = this.proveedorActual.pais.trim();
+  this.proveedorActual.direccion = this.proveedorActual.direccion.trim();
 
-    // Validar email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (this.proveedorActual.email && !emailRegex.test(this.proveedorActual.email)) {
-      alert('Por favor ingresa un email válido');
-      return;
-    }
-
-    this.isLoading.set(true);
-
-    let resultado;
-    if (this.modoEdicion() && this.proveedorActual.id) {
-      resultado = await this.proveedorService.actualizarProveedor(
-        this.proveedorActual.id,
-        this.proveedorActual
-      );
-    } else {
-      resultado = await this.proveedorService.agregarProveedor(this.proveedorActual);
-    }
-
-    this.isLoading.set(false);
-
-    if (resultado.success) {
-      alert(this.modoEdicion() ? 'Proveedor actualizado exitosamente' : 'Proveedor agregado exitosamente');
-      this.cerrarModal();
-      await this.cargarProveedores();
-    } else {
-      alert('Error: ' + resultado.error);
-    }
+  // Validaciones de campos obligatorios
+  if (!this.proveedorActual.nombre) {
+    alert('⚠️ El campo "Nombre" es obligatorio');
+    return;
   }
+
+  if (!this.proveedorActual.empresa) {
+    alert('⚠️ El campo "Empresa" es obligatorio');
+    return;
+  }
+
+  if (!this.proveedorActual.telefono) {
+    alert('⚠️ El campo "Teléfono" es obligatorio');
+    return;
+  }
+
+  if (!this.proveedorActual.email) {
+    alert('⚠️ El campo "Email" es obligatorio');
+    return;
+  }
+
+  if (!this.proveedorActual.rfc) {
+    alert('⚠️ El campo "RFC" es obligatorio');
+    return;
+  }
+
+  if (!this.proveedorActual.pais) {
+    alert('⚠️ El campo "País" es obligatorio');
+    return;
+  }
+
+  if (!this.proveedorActual.direccion) {
+    alert('⚠️ El campo "Dirección" es obligatorio');
+    return;
+  }
+
+  // Validar email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(this.proveedorActual.email)) {
+    alert('⚠️ Por favor ingresa un email válido (ejemplo: usuario@dominio.com)');
+    return;
+  }
+
+  // Validar RFC (debe tener 12 o 13 caracteres)
+  if (this.proveedorActual.rfc.length < 12 || this.proveedorActual.rfc.length > 13) {
+    alert('⚠️ El RFC debe tener 12 o 13 caracteres');
+    return;
+  }
+
+  // Validar teléfono (debe tener al menos 10 dígitos)
+  const telefonoLimpio = this.proveedorActual.telefono.replace(/\D/g, '');
+  if (telefonoLimpio.length < 10) {
+    alert('⚠️ El teléfono debe tener al menos 10 dígitos');
+    return;
+  }
+
+  this.isLoading.set(true);
+
+  let resultado;
+  if (this.modoEdicion() && this.proveedorActual.id) {
+    resultado = await this.proveedorService.actualizarProveedor(
+      this.proveedorActual.id,
+      this.proveedorActual
+    );
+  } else {
+    resultado = await this.proveedorService.agregarProveedor(this.proveedorActual);
+  }
+
+  this.isLoading.set(false);
+
+  if (resultado.success) {
+    alert('✅ ' + (this.modoEdicion() ? 'Proveedor actualizado exitosamente' : 'Proveedor agregado exitosamente'));
+    this.cerrarModal();
+    await this.cargarProveedores();
+  } else {
+    alert('❌ Error: ' + resultado.error);
+  }
+}
 
   confirmarEliminar(id: string | undefined) {
     if (!id) return;
