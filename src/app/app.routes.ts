@@ -32,10 +32,6 @@ export const routes: Routes = [
   loadComponent: () => import('./quotes/cotizaciones').then(m => m.CotizacionesComponent)
   },
   { 
-    path: 'reportes', 
-    redirectTo: '/main' 
-  },  
-  { 
   path: 'configuracion', 
   loadComponent: () => import('./configuration/configuracion').then(m => m.ConfiguracionComponent)
   },
