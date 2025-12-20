@@ -31,7 +31,7 @@ export class MainComponent implements OnInit {
   
   constructor(
     private firestore: Firestore,
-    private cdr: ChangeDetectorRef  // 👈 Agregado
+    private cdr: ChangeDetectorRef  
   ) {}
 
   async ngOnInit() {
@@ -45,7 +45,7 @@ export class MainComponent implements OnInit {
       })) as Producto[];
       
       console.log('Productos cargados:', this.productos);
-      this.cdr.detectChanges();  // 👈 Agregado: Fuerza actualización de la vista
+      this.cdr.detectChanges(); 
     } catch (error) {
       console.error('Error al cargar productos:', error);
     }
