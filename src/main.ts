@@ -8,9 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-
 import { AppComponent } from './app/app';
 import { routes } from './app/app.routes';
+import { appConfig } from './app/app.config';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBbluQ9NiE9pdVTttX38EGj-Gty1a8Ot4Y",

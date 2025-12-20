@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './services/theme.service';
 
 @Component({
-  selector: 'app-root',  // 👈 Debe ser exactamente 'app-root'
+  selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  template: '<router-outlet></router-outlet>'
 })
-export class AppComponent {
-  title = 'alflabWeb';
+export class AppComponent implements OnInit {
+  constructor(private themeService: ThemeService) {}
+
+  ngOnInit() {
+    this.themeService.loadTheme();
+  }
 }

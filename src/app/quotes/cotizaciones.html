@@ -76,50 +76,52 @@
 
     <!-- Tabla de cotizaciones -->
     <div class="table-container" *ngIf="!isLoading()">
-      <table>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Empresa</th>
-            <th>Productos</th>
-            <th>Total</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let cotizacion of filtrarCotizaciones()">
-            <td>{{ cotizacion.fecha | date:'dd/MM/yyyy' }}</td>
-            <td>{{ cotizacion.clienteNombre }}</td>
-            <td>{{ cotizacion.clienteEmpresa }}</td>
-            <td>{{ cotizacion.productos.length }} producto(s)</td>
-            <td>${{ cotizacion.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
-            <td>
-              <span class="estado-badge" [class.pendiente]="cotizacion.estado === 'pendiente'">
-                {{ cotizacion.estado || 'pendiente' }}
-              </span>
-            </td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn-view" (click)="verDetalle(cotizacion)" title="Ver detalle">
-                  <span class="material-icons">visibility</span>
-                </button>
-                <button class="btn-delete" (click)="confirmarEliminar(cotizacion.id)" title="Eliminar">
-                  <span class="material-icons">delete</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="filtrarCotizaciones().length === 0">
-            <td colspan="7" style="text-align: center; padding: 40px; color: white;">
-              No se encontraron cotizaciones
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper"></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Empresa</th>
+              <th>Productos</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cotizacion of filtrarCotizaciones()">
+              <td>{{ cotizacion.fecha | date:'dd/MM/yyyy' }}</td>
+              <td>{{ cotizacion.clienteNombre }}</td>
+              <td>{{ cotizacion.clienteEmpresa }}</td>
+              <td>{{ cotizacion.productos.length }} producto(s)</td>
+              <td>${{ cotizacion.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
+              <td>
+                <span class="estado-badge" [class.pendiente]="cotizacion.estado === 'pendiente'">
+                  {{ cotizacion.estado || 'pendiente' }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-view" (click)="verDetalle(cotizacion)" title="Ver detalle">
+                    <span class="material-icons">visibility</span>
+                  </button>
+                  <button class="btn-delete" (click)="confirmarEliminar(cotizacion.id)" title="Eliminar">
+                    <span class="material-icons">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filtrarCotizaciones().length === 0">
+              <td colspan="7" style="text-align: center; padding: 40px; color: white;">
+                No se encontraron cotizaciones
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+    </div>
 
   <!-- VISTA: NUEVA COTIZACIÓN -->
   <div class="content-area cotizacion-nueva" *ngIf="vistaActual === 'nueva'">
@@ -334,6 +336,7 @@
               </tfoot>
             </table>
           </div>
+        </div>
 
           <!-- Acciones -->
           <div class="detalle-acciones">
@@ -347,7 +350,6 @@
           </div>
         </div>
       </div>
-    </div>
   }
 
   <!-- MODAL CONFIRMAR ELIMINACIÓN -->
@@ -366,4 +368,3 @@
       </div>
     </div>
   }
-</div>

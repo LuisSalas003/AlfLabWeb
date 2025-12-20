@@ -100,7 +100,8 @@
 
     <!-- Tabla de productos -->
     <div class="table-container" *ngIf="!isLoading()">
-      <table>
+      <div class="table-wrapper">
+        <table>
         <thead>
           <tr>
             <th>Imagen</th>
@@ -148,6 +149,7 @@
         </tbody>
       </table>
     </div>
+   </div> 
   </div>
 
   <!-- MODAL AGREGAR/EDITAR -->
