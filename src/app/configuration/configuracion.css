@@ -1,0 +1,434 @@
+/* Importar estilos base */
+@import '../products/productos.css';
+
+/* Estilos específicos de configuración */
+
+.config-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.config-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 0;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.config-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background: rgba(10, 35, 66, 0.9);
+  padding: 20px 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.5);
+}
+
+.card-header .material-icons {
+  color: #3498db;
+  font-size: 28px;
+}
+
+.card-header h2 {
+  color: white;
+  font-size: 20px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 25px;
+}
+
+/* Info del usuario */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.info-value {
+  color: white;
+  font-size: 15px;
+}
+
+/* Settings row */
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.setting-info {
+  flex: 1;
+}
+
+.setting-label {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.setting-description {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Select de tema */
+.theme-select {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.theme-select option {
+  background: #1a4d7a;
+  color: white;
+  padding: 10px;
+}
+
+.theme-select:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.theme-select:focus {
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+}
+
+/* Botón cambiar contraseña */
+.btn-change-password {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+  white-space: nowrap;
+}
+
+.btn-change-password:hover {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+}
+
+.btn-change-password .material-icons {
+  font-size: 20px;
+}
+
+/* Botón cerrar sesión */
+.btn-logout {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.btn-logout .material-icons {
+  font-size: 20px;
+}
+
+/* Modal de contraseña */
+.modal-content-password {
+  background: linear-gradient(135deg, #2874a6 0%, #1f618d 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  width: 90%;
+  animation: scaleIn 0.3s ease;
+}
+
+.password-form {
+  padding: 30px;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding: 12px 50px 12px 15px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.password-input-wrapper input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.password-input-wrapper input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.toggle-password:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.toggle-password .material-icons {
+  font-size: 20px;
+}
+
+/* Mensajes */
+.mensaje-exito {
+  background: rgba(39, 174, 96, 0.3);
+  color: #2ecc71;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid rgba(39, 174, 96, 0.5);
+  animation: slideDown 0.3s ease;
+}
+
+.mensaje-error {
+  background: rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid rgba(231, 76, 60, 0.5);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tema claro */
+body[data-theme="light"] .main-wrapper {
+  background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 50%, #95a5a6 100%);
+}
+
+body[data-theme="light"] .top-header {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+body[data-theme="light"] h1,
+body[data-theme="light"] h2,
+body[data-theme="light"] .menu-item,
+body[data-theme="light"] .close-button,
+body[data-theme="light"] .info-value,
+body[data-theme="light"] .setting-label {
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .sidebar-menu {
+  background: #34495e;
+}
+
+body[data-theme="light"] .menu-header {
+  background: #2c3e50;
+}
+
+body[data-theme="light"] .menu-header h2,
+body[data-theme="light"] .menu-header .close-button {
+  color: white;
+}
+
+body[data-theme="light"] .menu-item {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme="light"] .menu-item:hover,
+body[data-theme="light"] .menu-item.active {
+  color: white;
+}
+
+body[data-theme="light"] .config-card {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .card-header {
+  background: #34495e;
+}
+
+body[data-theme="light"] .card-header h2 {
+  color: white;
+}
+
+body[data-theme="light"] .info-label,
+body[data-theme="light"] .setting-description {
+  color: #7f8c8d;
+}
+
+body[data-theme="light"] .info-row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .theme-select,
+body[data-theme="light"] .password-input-wrapper input {
+  background: rgba(52, 73, 94, 0.1);
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .password-input-wrapper input::placeholder {
+  color: rgba(44, 62, 80, 0.5);
+}
+
+body[data-theme="light"] .toggle-password {
+  color: #7f8c8d;
+}
+
+body[data-theme="light"] .modal-content-password {
+  background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
+}
+
+body[data-theme="light"] .modal-header {
+  background: #34495e;
+}
+
+body[data-theme="light"] .modal-header h2 {
+  color: white;
+}
+
+body[data-theme="light"] .form-group label {
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .table-container {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+body[data-theme="light"] thead {
+  background: #34495e;
+}
+
+body[data-theme="light"] tbody tr:nth-child(odd) {
+  background: rgba(236, 240, 241, 0.5);
+}
+
+body[data-theme="light"] tbody tr:nth-child(even) {
+  background: rgba(189, 195, 199, 0.3);
+}
+
+body[data-theme="light"] td {
+  color: #2c3e50;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .config-container {
+    padding: 20px;
+  }
+
+  .setting-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .theme-select,
+  .btn-change-password,
+  .btn-logout {
+    width: 100%;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .modal-content-password {
+    max-width: 95%;
+  }
+
+  .password-form {
+    padding: 20px;
+  }
+}

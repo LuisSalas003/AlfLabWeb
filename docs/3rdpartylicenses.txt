@@ -394,12 +394,12 @@ License: "MIT"
 
 
 --------------------------------------------------------------------------------
-Package: @firebase/app-check
+Package: @firebase/auth
 License: "Apache-2.0"
 
 
 --------------------------------------------------------------------------------
-Package: @firebase/auth
+Package: @firebase/app-check
 License: "Apache-2.0"
 
 

@@ -1,0 +1,252 @@
+<div class="main-wrapper">
+  <!-- Encabezado -->
+  <div class="top-header">
+    <button class="menu-button" (click)="toggleMenu()">
+      <span class="material-symbols-outlined">dehaze</span>
+    </button>
+    <h1>Configuración</h1>
+  </div>
+
+  <!-- Menú lateral -->
+  <div class="sidebar-menu" [class.open]="menuAbierto">
+    <div class="menu-header">
+      <h2>Menú</h2>
+      <button class="close-button" (click)="toggleMenu()">✕</button>
+    </div>
+    <nav class="menu-nav">
+      <a routerLink="/main" class="menu-item">
+        <span class="material-icons">inventory_2</span>
+        Stock General
+      </a>
+      <a routerLink="/productos" class="menu-item">
+        <span class="material-icons">shopping_cart</span>
+        Productos
+      </a>
+      <a routerLink="/proveedores" class="menu-item">
+        <span class="material-icons">local_shipping</span>
+        Proveedores
+      </a>
+      <a routerLink="/clientes" class="menu-item">
+        <span class="material-icons">people</span>
+        Clientes
+      </a>
+      <a routerLink="/cotizaciones" class="menu-item">
+        <span class="material-icons">description</span>
+        Cotizaciones
+      </a>
+      <a routerLink="/reportes" class="menu-item">
+        <span class="material-icons">assessment</span>
+        Reportes
+      </a>
+      <a routerLink="/configuracion" class="menu-item active">
+        <span class="material-icons">settings</span>
+        Configuración
+      </a>
+      <a routerLink="/login" class="menu-item logout">
+        <span class="material-icons">logout</span>
+        Cerrar Sesión
+      </a>
+    </nav>
+  </div>
+
+  <!-- Overlay del menú -->
+  <div class="menu-overlay" *ngIf="menuAbierto" (click)="toggleMenu()"></div>
+
+  <!-- Contenido principal -->
+  <div class="content-area config-container">
+    
+    <!-- Mensaje de éxito global -->
+    <div class="mensaje-exito" *ngIf="mensajeExito">
+      {{ mensajeExito }}
+    </div>
+
+    <!-- Card: Información del usuario -->
+    <div class="config-card">
+      <div class="card-header">
+        <span class="material-icons">account_circle</span>
+        <h2>Información del Usuario</h2>
+      </div>
+      <div class="card-content">
+        <div class="info-row">
+          <span class="info-label">Nombre de usuario:</span>
+          <span class="info-value">{{ userName }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Correo electrónico:</span>
+          <span class="info-value">{{ userEmail }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Apariencia -->
+    <div class="config-card">
+      <div class="card-header">
+        <span class="material-icons">palette</span>
+        <h2>Apariencia</h2>
+      </div>
+      <div class="card-content">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label class="setting-label">Tema de la aplicación</label>
+            <p class="setting-description">Cambia entre modo claro y oscuro</p>
+          </div>
+          <select 
+            class="theme-select" 
+            [(ngModel)]="temaActual" 
+            (change)="cambiarTema($event)"
+          >
+            <option value="dark">🌙 Modo Oscuro</option>
+            <option value="light">☀️ Modo Claro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Seguridad -->
+    <div class="config-card">
+      <div class="card-header">
+        <span class="material-icons">security</span>
+        <h2>Seguridad</h2>
+      </div>
+      <div class="card-content">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label class="setting-label">Contraseña</label>
+            <p class="setting-description">Cambia tu contraseña de acceso</p>
+          </div>
+          <button class="btn-change-password" (click)="abrirModalPassword()">
+            <span class="material-icons">lock_reset</span>
+            Cambiar Contraseña
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Sesión -->
+    <div class="config-card">
+      <div class="card-header">
+        <span class="material-icons">logout</span>
+        <h2>Sesión</h2>
+      </div>
+      <div class="card-content">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label class="setting-label">Cerrar sesión</label>
+            <p class="setting-description">Cierra tu sesión actual</p>
+          </div>
+          <button class="btn-logout" (click)="cerrarSesion()">
+            <span class="material-icons">exit_to_app</span>
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL CAMBIAR CONTRASEÑA -->
+  @if (showModalPassword()) {
+    <div class="modal-overlay-centered">
+      <div class="modal-content-password">
+        <div class="modal-header">
+          <h2>Cambiar Contraseña</h2>
+          <button class="close-button" (click)="cerrarModalPassword()" type="button">✕</button>
+        </div>
+
+        <form class="password-form" (ngSubmit)="cambiarPassword()">
+          
+          <!-- Mensaje de error -->
+          <div class="mensaje-error" *ngIf="mensajeError">
+            {{ mensajeError }}
+          </div>
+
+          <!-- Mensaje de éxito -->
+          <div class="mensaje-exito" *ngIf="mensajeExito">
+            {{ mensajeExito }}
+          </div>
+
+          <!-- Contraseña actual -->
+          <div class="form-group">
+            <label>Contraseña Actual *</label>
+            <div class="password-input-wrapper">
+              <input 
+                [type]="mostrarPasswordActual ? 'text' : 'password'"
+                [(ngModel)]="passwordActual" 
+                name="passwordActual"
+                placeholder="Ingresa tu contraseña actual"
+                required
+                autocomplete="current-password"
+              >
+              <button 
+                type="button" 
+                class="toggle-password" 
+                (click)="togglePasswordActual()"
+              >
+                <span class="material-icons">
+                  {{ mostrarPasswordActual ? 'visibility_off' : 'visibility' }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Nueva contraseña -->
+          <div class="form-group">
+            <label>Nueva Contraseña *</label>
+            <div class="password-input-wrapper">
+              <input 
+                [type]="mostrarPasswordNueva ? 'text' : 'password'"
+                [(ngModel)]="passwordNueva" 
+                name="passwordNueva"
+                placeholder="Ingresa tu nueva contraseña (mínimo 6 caracteres)"
+                required
+                autocomplete="new-password"
+              >
+              <button 
+                type="button" 
+                class="toggle-password" 
+                (click)="togglePasswordNueva()"
+              >
+                <span class="material-icons">
+                  {{ mostrarPasswordNueva ? 'visibility_off' : 'visibility' }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirmar contraseña -->
+          <div class="form-group">
+            <label>Confirmar Nueva Contraseña *</label>
+            <div class="password-input-wrapper">
+              <input 
+                [type]="mostrarPasswordConfirmar ? 'text' : 'password'"
+                [(ngModel)]="passwordConfirmar" 
+                name="passwordConfirmar"
+                placeholder="Confirma tu nueva contraseña"
+                required
+                autocomplete="new-password"
+              >
+              <button 
+                type="button" 
+                class="toggle-password" 
+                (click)="togglePasswordConfirmar()"
+              >
+                <span class="material-icons">
+                  {{ mostrarPasswordConfirmar ? 'visibility_off' : 'visibility' }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="cerrarModalPassword()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary" [disabled]="isLoading()">
+              {{ isLoading() ? 'Cambiando...' : 'Cambiar Contraseña' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
