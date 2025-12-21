@@ -120,18 +120,20 @@
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   color: white;
   border: none;
-  padding: 12px 24px;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
-  align-items: center;
   gap: 8px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
   white-space: nowrap;
+  height: 48px;
+  padding: 24px 24px;
+  display: flex;
+  align-items: center;
 }
+
 
 .btn-agregar-producto:hover {
   background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
@@ -142,6 +144,27 @@
 .btn-agregar-producto .material-icons {
   font-size: 20px;
 }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15); /* blanco transparente */
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary .material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
 
 /* Carrito */
 .carrito-card {
@@ -491,7 +514,7 @@
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
   .cotizacion-grid {
     grid-template-columns: 1fr;
   }
@@ -563,4 +586,91 @@
     color: black;
     border-color: black;
   }
+}
+
+/* Asegurar que los títulos sean visibles */
+.seccion-card h3 {
+  color: white !important;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.5);
+}
+
+/* Labels visibles */
+.form-group label,
+.setting-info label,
+.setting-label {
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Select visibles */
+.select-cliente,
+.select-producto {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.select-cliente option,
+.select-producto option {
+  background: #1a4d7a !important;
+  color: white !important;
+}
+
+/* Info del cliente visible */
+.cliente-info p {
+  color: white !important;
+}
+
+.cliente-info strong {
+  color: #5dade2 !important;
+}
+
+/* Carrito */
+.carrito-item h4 {
+  color: white !important;
+}
+
+.item-detalles {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* TEMA CLARO - Textos oscuros */
+body[data-theme="light"] .seccion-card h3 {
+  color: #2c3e50 !important;
+}
+
+body[data-theme="light"] .form-group label,
+body[data-theme="light"] .setting-label {
+  color: #2c3e50 !important;
+}
+
+body[data-theme="light"] .select-cliente,
+body[data-theme="light"] .select-producto {
+  color: #2c3e50 !important;
+  background: rgba(52, 73, 94, 0.1) !important;
+}
+
+body[data-theme="light"] .cliente-info p {
+  color: #2c3e50 !important;
+}
+
+body[data-theme="light"] .carrito-item h4 {
+  color: #2c3e50 !important;
+}
+
+body[data-theme="light"] .item-detalles {
+  color: #7f8c8d !important;
+}
+/* Centrar botón volver en la vista nueva cotización */
+.cotizacion-nueva .action-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.content-area {
+  max-width: 100%;
+  overflow-x: hidden;
 }

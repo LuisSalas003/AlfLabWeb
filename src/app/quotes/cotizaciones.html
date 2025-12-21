@@ -76,7 +76,7 @@
 
     <!-- Tabla de cotizaciones -->
     <div class="table-container" *ngIf="!isLoading()">
-      <div class="table-wrapper"></div>
+      <div class="table-wrapper">
         <table>
           <thead>
             <tr>
@@ -121,7 +121,7 @@
         </table>
       </div>
     </div>
-    </div>
+  </div>
 
   <!-- VISTA: NUEVA COTIZACIÓN -->
   <div class="content-area cotizacion-nueva" *ngIf="vistaActual === 'nueva'">
@@ -138,52 +138,54 @@
       <div class="panel-seleccion">
         <!-- Seleccionar Cliente -->
         <div class="seccion-card">
-          <h3>1. Seleccionar Cliente *</h3>
+          <h3 style="color: white;">1. Seleccionar Cliente *</h3>
+          <!-- Sustituir este bloque -->
           <select 
             [(ngModel)]="clienteSeleccionado" 
             (change)="seleccionarCliente($any($event.target).value)"
-            class="select-cliente"
-          >
+            class="select-cliente">
             <option value="">-- Selecciona un cliente --</option>
             <option *ngFor="let cliente of clientes()" [value]="cliente.id">
               {{ cliente.nombre }} - {{ cliente.empresa }}
             </option>
           </select>
 
-          <div class="cliente-info" *ngIf="clienteSeleccionado">
-            <p><strong>Cliente:</strong> {{ clienteSeleccionado.nombre }}</p>
-            <p><strong>Empresa:</strong> {{ clienteSeleccionado.empresa }}</p>
-            <p><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
+
+          <div class="cliente-info" *ngIf="clienteSeleccionado" style="color: white;">
+            <p style="color: white;"><strong>Cliente:</strong> {{ clienteSeleccionado.nombre }}</p>
+            <p style="color: white;"><strong>Empresa:</strong> {{ clienteSeleccionado.empresa }}</p>
+            <p style="color: white;"><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
           </div>
         </div>
 
         <!-- Agregar Productos -->
         <div class="seccion-card">
-          <h3>2. Agregar Productos *</h3>
+          <h3 style="color: white;">2. Agregar Productos *</h3>
           <div class="agregar-producto-form">
             <div class="form-group">
-              <label>Producto</label>
+              <label style="color: white;">Producto</label>
               <select 
                 [(ngModel)]="productoSeleccionadoId" 
                 class="select-producto"
+                style="color: white; background: rgba(255, 255, 255, 0.15);"
               >
-                <option value="">-- Selecciona un producto --</option>
-                <option *ngFor="let producto of productos()" [value]="producto.id">
+                <option value="" style="background: #1a4d7a; color: white;">-- Selecciona un producto --</option>
+                <option *ngFor="let producto of productos()" [value]="producto.id" style="background: #1a4d7a; color: white;">
                   {{ producto.nombre }} - ${{ producto.precio.toLocaleString('es-MX') }}
                 </option>
               </select>
             </div>
 
             <div class="form-group cantidad-group">
-              <label>Cantidad</label>
+              <label style="color: white;">Cantidad</label>
               <input 
                 type="number" 
                 [(ngModel)]="cantidadProducto" 
                 min="1"
                 class="input-cantidad"
+                style="color: white; background: rgba(255, 255, 255, 0.15);"
               >
             </div>
-
             <button 
               type="button" 
               class="btn-agregar-producto" 
@@ -199,28 +201,28 @@
       <!-- Panel derecho: Carrito -->
       <div class="panel-carrito">
         <div class="seccion-card carrito-card">
-          <h3>Carrito de Cotización</h3>
+          <h3 style="color: white;">Carrito de Cotización</h3>
 
           <div class="carrito-vacio" *ngIf="carrito().length === 0">
             <span class="material-icons">shopping_cart</span>
-            <p>No hay productos en el carrito</p>
+            <p style="color: rgba(255, 255, 255, 0.5);">No hay productos en el carrito</p>
           </div>
 
           <div class="carrito-lista" *ngIf="carrito().length > 0">
             <div class="carrito-item" *ngFor="let item of carrito(); let i = index">
               <div class="item-info">
-                <h4>{{ item.nombre }}</h4>
-                <p class="item-detalles">
+                <h4 style="color: white;">{{ item.nombre }}</h4>
+                <p class="item-detalles" style="color: rgba(255, 255, 255, 0.7);">
                   <span>Código: {{ item.codigo }}</span>
                   <span>Proveedor: {{ item.proveedor }}</span>
                 </p>
-                <p class="item-precio">
+                <p class="item-precio" style="color: #5dade2;">
                   Precio unitario: ${{ item.precio.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
                 </p>
               </div>
 
               <div class="item-cantidad">
-                <label>Cantidad:</label>
+                <label style="color: rgba(255, 255, 255, 0.7);">Cantidad:</label>
                 <input 
                   type="number" 
                   [value]="item.cantidad" 
@@ -231,8 +233,10 @@
               </div>
 
               <div class="item-subtotal">
-                <p class="subtotal-label">Subtotal:</p>
-                <p class="subtotal-valor">${{ item.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</p>
+                <p class="subtotal-label" style="color: rgba(255, 255, 255, 0.7);">Subtotal:</p>
+                <p class="subtotal-valor" style="color: #27ae60;">
+                  ${{ item.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
+                </p>
               </div>
 
               <button 
@@ -248,8 +252,10 @@
           <!-- Total -->
           <div class="carrito-total" *ngIf="carrito().length > 0">
             <div class="total-row">
-              <span class="total-label">TOTAL:</span>
-              <span class="total-valor">${{ calcularTotal().toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</span>
+              <span class="total-label" style="color: white;">TOTAL:</span>
+              <span class="total-valor" style="color: #27ae60;">
+                ${{ calcularTotal().toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
+              </span>
             </div>
           </div>
 
@@ -305,38 +311,39 @@
           <!-- Productos -->
           <div class="detalle-seccion">
             <h3>Productos Cotizados</h3>
-            <table class="tabla-detalle">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Código</th>
-                  <th>Proveedor</th>
-                  <th>Precio Unit.</th>
-                  <th>Cantidad</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let prod of cotizacionDetalle.productos">
-                  <td>{{ prod.nombre }}</td>
-                  <td>{{ prod.codigo }}</td>
-                  <td>{{ prod.proveedor }}</td>
-                  <td>${{ prod.precio.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
-                  <td>{{ prod.cantidad }}</td>
-                  <td>${{ prod.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="5" class="total-label">TOTAL:</td>
-                  <td class="total-valor">
-                    ${{ cotizacionDetalle.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+            <div class="table-wrapper">
+              <table class="tabla-detalle">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Código</th>
+                    <th>Proveedor</th>
+                    <th>Precio Unit.</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prod of cotizacionDetalle.productos">
+                    <td>{{ prod.nombre }}</td>
+                    <td>{{ prod.codigo }}</td>
+                    <td>{{ prod.proveedor }}</td>
+                    <td>${{ prod.precio.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
+                    <td>{{ prod.cantidad }}</td>
+                    <td>${{ prod.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5" class="total-label">TOTAL:</td>
+                    <td class="total-valor">
+                      ${{ cotizacionDetalle.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
-        </div>
 
           <!-- Acciones -->
           <div class="detalle-acciones">
@@ -350,6 +357,7 @@
           </div>
         </div>
       </div>
+    </div>
   }
 
   <!-- MODAL CONFIRMAR ELIMINACIÓN -->
@@ -368,3 +376,4 @@
       </div>
     </div>
   }
+</div>

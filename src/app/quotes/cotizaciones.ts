@@ -13,11 +13,15 @@ import { ProductoService, Producto } from '../services/product.service';
   imports: [CommonModule, FormsModule, RouterModule],
   styleUrls: ['./cotizaciones.css']
 })
+
+
+
 export class CotizacionesComponent implements OnInit {
   // Listas
   cotizaciones = signal<Cotizacion[]>([]);
   clientes = signal<Cliente[]>([]);
   productos = signal<Producto[]>([]);
+  clienteSeleccionadoId: string = '';
   
   // Carrito de productos
   carrito = signal<ProductoCotizado[]>([]);
@@ -87,10 +91,10 @@ export class CotizacionesComponent implements OnInit {
   }
 
   // Seleccionar cliente
-  seleccionarCliente(clienteId: string) {
-    const cliente = this.clientes().find(c => c.id === clienteId);
-    this.clienteSeleccionado = cliente || null;
-  }
+  seleccionarCliente(id: string) {
+  this.clienteSeleccionado = this.clientes().find(c => c.id === id) || null;
+}
+
 
   // Agregar producto al carrito
   agregarProductoAlCarrito() {
