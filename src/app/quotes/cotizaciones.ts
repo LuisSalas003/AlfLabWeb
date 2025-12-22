@@ -14,19 +14,19 @@ import { ProductoService, Producto } from '../services/product.service';
   styleUrls: ['./cotizaciones.css']
 })
 
-
-
 export class CotizacionesComponent implements OnInit {
   // Listas
   cotizaciones = signal<Cotizacion[]>([]);
   clientes = signal<Cliente[]>([]);
   productos = signal<Producto[]>([]);
+  
+  // ID del cliente seleccionado (para el select)
   clienteSeleccionadoId: string = '';
   
   // Carrito de productos
   carrito = signal<ProductoCotizado[]>([]);
   
-  // Cliente seleccionado
+  // Cliente seleccionado (objeto completo)
   clienteSeleccionado: Cliente | null = null;
   
   // Producto para agregar
@@ -85,6 +85,7 @@ export class CotizacionesComponent implements OnInit {
 
   limpiarFormulario() {
     this.clienteSeleccionado = null;
+    this.clienteSeleccionadoId = '';
     this.carrito.set([]);
     this.productoSeleccionadoId = '';
     this.cantidadProducto = 1;
@@ -92,9 +93,8 @@ export class CotizacionesComponent implements OnInit {
 
   // Seleccionar cliente
   seleccionarCliente(id: string) {
-  this.clienteSeleccionado = this.clientes().find(c => c.id === id) || null;
-}
-
+    this.clienteSeleccionado = this.clientes().find(c => c.id === id) || null;
+  }
 
   // Agregar producto al carrito
   agregarProductoAlCarrito() {
