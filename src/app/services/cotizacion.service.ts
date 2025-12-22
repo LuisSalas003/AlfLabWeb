@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc, Timestamp } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, doc, getDoc, deleteDoc, updateDoc,Timestamp } from '@angular/fire/firestore';
+
 
 export interface ProductoCotizado {
   productoId: string;
@@ -21,6 +22,8 @@ export interface Cotizacion {
   fecha: Date;
   estado?: string; // 'pendiente', 'aceptada', 'rechazada'
 }
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -116,4 +119,16 @@ export class CotizacionService {
       return { success: false, error: error.message };
     }
   }
+
+  async actualizarEstado(id: string, estado: string): Promise<{success: boolean, error?: string}> {
+  try {
+    const cotizacionRef = doc(this.firestore, `cotizaciones/${id}`);
+    await updateDoc(cotizacionRef, { estado });
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error al actualizar estado:', error);
+    return { success: false, error: error.message };
+  }
+}
+
 }

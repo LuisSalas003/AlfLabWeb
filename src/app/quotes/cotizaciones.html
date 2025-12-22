@@ -97,14 +97,17 @@
               <td>{{ cotizacion.productos.length }} producto(s)</td>
               <td>${{ cotizacion.total.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}</td>
               <td>
-                <span class="estado-badge" [class.pendiente]="cotizacion.estado === 'pendiente'">
-                  {{ cotizacion.estado || 'pendiente' }}
+                <span class="estado-badge" [ngClass]="getEstadoClass(cotizacion.estado || 'pendiente')">
+                  {{ getEstadoTexto(cotizacion.estado || 'pendiente') }}
                 </span>
               </td>
               <td>
                 <div class="action-buttons">
                   <button class="btn-view" (click)="verDetalle(cotizacion)" title="Ver detalle">
                     <span class="material-icons">visibility</span>
+                  </button>
+                  <button class="btn-edit" (click)="abrirModalEstado(cotizacion)" title="Cambiar estado">
+                    <span class="material-icons">edit</span>
                   </button>
                   <button class="btn-delete" (click)="confirmarEliminar(cotizacion.id)" title="Eliminar">
                     <span class="material-icons">delete</span>
@@ -303,8 +306,8 @@
               </div>
               <div class="info-item">
                 <span class="info-label">Estado:</span>
-                <span class="estado-badge" [class.pendiente]="cotizacionDetalle.estado === 'pendiente'">
-                  {{ cotizacionDetalle.estado || 'pendiente' }}
+                <span class="estado-badge" [ngClass]="getEstadoClass(cotizacionDetalle.estado || 'pendiente')">
+                  {{ getEstadoTexto(cotizacionDetalle.estado || 'pendiente') }}
                 </span>
               </div>
             </div>
@@ -357,6 +360,56 @@
               Imprimir
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL CAMBIAR ESTADO -->
+  @if (showEstadoModal() && cotizacionAEditar) {
+    <div class="modal-overlay-centered">
+      <div class="modal-content-estado">
+        <div class="modal-header">
+          <h3>Cambiar Estado de Cotización</h3>
+          <button class="close-button" (click)="cerrarModalEstado()" type="button">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-subtitle">Cliente: {{ cotizacionAEditar.clienteNombre }} - {{ cotizacionAEditar.clienteEmpresa }}</p>
+          <div class="estado-opciones">
+            <label class="estado-opcion" [class.selected]="nuevoEstado === 'pendiente'">
+              <input 
+                type="radio" 
+                name="estado" 
+                value="pendiente" 
+                [(ngModel)]="nuevoEstado"
+              >
+              <span class="estado-badge pendiente">PENDIENTE</span>
+            </label>
+            <label class="estado-opcion" [class.selected]="nuevoEstado === 'aceptada'">
+              <input 
+                type="radio" 
+                name="estado" 
+                value="aceptada" 
+                [(ngModel)]="nuevoEstado"
+              >
+              <span class="estado-badge aceptada">ACEPTADA</span>
+            </label>
+            <label class="estado-opcion" [class.selected]="nuevoEstado === 'rechazada'">
+              <input 
+                type="radio" 
+                name="estado" 
+                value="rechazada" 
+                [(ngModel)]="nuevoEstado"
+              >
+              <span class="estado-badge rechazada">RECHAZADA</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="cerrarModalEstado()">Cancelar</button>
+          <button class="btn-primary" (click)="cambiarEstado()" [disabled]="isLoading()">
+            {{ isLoading() ? 'Actualizando...' : 'Actualizar Estado' }}
+          </button>
         </div>
       </div>
     </div>

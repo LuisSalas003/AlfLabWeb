@@ -418,12 +418,25 @@
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
+  display: inline-block;
 }
 
 .estado-badge.pendiente {
   background: rgba(241, 196, 15, 0.3);
   color: #f1c40f;
   border: 1px solid #f1c40f;
+}
+
+.estado-badge.aceptada {
+  background: rgba(39, 174, 96, 0.3);
+  color: #27ae60;
+  border: 1px solid #27ae60;
+}
+
+.estado-badge.rechazada {
+  background: rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
 }
 
 /* Botón view */
@@ -445,6 +458,28 @@
 }
 
 .btn-view .material-icons {
+  font-size: 20px;
+}
+
+/* Botón edit */
+.btn-edit {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f39c12;
+}
+
+.btn-edit:hover {
+  background: rgba(243, 156, 18, 0.2);
+}
+
+.btn-edit .material-icons {
   font-size: 20px;
 }
 
@@ -704,4 +739,87 @@ body[data-theme="light"] .item-detalles {
   overflow-y: auto;
   height: calc(100vh - 80px);
   padding: 20px;
+}
+
+/* Modal cambiar estado */
+.modal-content-estado {
+  background: linear-gradient(135deg, #1a4d7a 0%, #0a2342 100%);
+  border-radius: 15px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.modal-content-estado .modal-header {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-content-estado .modal-header h3 {
+  color: white;
+  font-size: 20px;
+  margin: 0;
+}
+
+.modal-content-estado .modal-body {
+  padding: 30px 25px;
+}
+
+.modal-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.estado-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.estado-opcion {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.estado-opcion:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.estado-opcion.selected {
+  border-color: #3498db;
+  background: rgba(52, 152, 219, 0.2);
+}
+
+.estado-opcion input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.estado-opcion .estado-badge {
+  font-size: 14px;
+  padding: 8px 16px;
+}
+
+.modal-content-estado .modal-actions {
+  padding: 20px 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }

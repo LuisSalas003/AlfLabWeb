@@ -44,9 +44,16 @@ export class CotizacionesComponent implements OnInit {
   showDetalleModal = signal(false);
   cotizacionDetalle: Cotizacion | null = null;
   
+  showEstadoModal = signal(false);
+  cotizacionAEditar: Cotizacion | null = null;
+  nuevoEstado: string = '';
+  
   // Menú y búsqueda
   menuAbierto: boolean = false;
   busqueda: string = '';
+  
+  // Estados disponibles
+  estadosDisponibles = ['pendiente', 'aceptada', 'rechazada'];
   
   constructor(
     private cotizacionService: CotizacionService,
@@ -215,6 +222,40 @@ export class CotizacionesComponent implements OnInit {
     this.cotizacionDetalle = null;
   }
 
+  // Cambiar estado de cotización
+  abrirModalEstado(cotizacion: Cotizacion) {
+    this.cotizacionAEditar = cotizacion;
+    this.nuevoEstado = cotizacion.estado || 'pendiente';
+    this.showEstadoModal.set(true);
+  }
+
+  cerrarModalEstado() {
+    this.showEstadoModal.set(false);
+    this.cotizacionAEditar = null;
+    this.nuevoEstado = '';
+  }
+
+  async cambiarEstado() {
+    if (!this.cotizacionAEditar || !this.nuevoEstado) return;
+
+    this.isLoading.set(true);
+    const resultado = await this.cotizacionService.actualizarEstado(
+      this.cotizacionAEditar.id!,
+      this.nuevoEstado
+    );
+    this.isLoading.set(false);
+
+    if (resultado.success) {
+      alert('✅ Estado actualizado exitosamente');
+      this.showEstadoModal.set(false);
+      this.cotizacionAEditar = null;
+      this.nuevoEstado = '';
+      await this.cargarDatos();
+    } else {
+      alert('❌ Error al actualizar estado: ' + resultado.error);
+    }
+  }
+
   // Confirmar eliminación
   confirmarEliminar(id: string | undefined) {
     if (!id) return;
@@ -265,5 +306,23 @@ export class CotizacionesComponent implements OnInit {
   // Imprimir cotización (básico)
   imprimirCotizacion(cotizacion: Cotizacion) {
     window.print();
+  }
+
+  // Obtener clase CSS según estado
+  getEstadoClass(estado: string): string {
+    switch(estado) {
+      case 'aceptada': return 'aceptada';
+      case 'rechazada': return 'rechazada';
+      default: return 'pendiente';
+    }
+  }
+
+  // Obtener texto formateado del estado
+  getEstadoTexto(estado: string): string {
+    switch(estado) {
+      case 'aceptada': return 'ACEPTADA';
+      case 'rechazada': return 'RECHAZADA';
+      default: return 'PENDIENTE';
+    }
   }
 }
