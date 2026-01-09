@@ -1,5 +1,4 @@
 <div class="main-wrapper">
-  <!-- Encabezado -->
   <div class="top-header">
     <button class="menu-button" (click)="toggleMenu()">
       <span class="material-symbols-outlined">dehaze</span>
@@ -18,7 +17,6 @@
     </div>
   </div>
 
-  <!-- Menú lateral -->
   <div class="sidebar-menu" [class.open]="menuAbierto">
     <div class="menu-header">
       <h2>Menú</h2>
@@ -56,12 +54,9 @@
     </nav>
   </div>
 
-  <!-- Overlay del menú -->
   <div class="menu-overlay" *ngIf="menuAbierto" (click)="toggleMenu()"></div>
 
-  <!-- VISTA: LISTA DE COTIZACIONES -->
   <div class="content-area" *ngIf="vistaActual === 'lista'">
-    <!-- Botón nueva cotización -->
     <div class="action-bar">
       <button class="btn-primary" (click)="mostrarNuevaCotizacion()">
         <span class="material-icons">add</span>
@@ -69,12 +64,10 @@
       </button>
     </div>
 
-    <!-- Indicador de carga -->
     <div *ngIf="isLoading()" class="loading-indicator">
       <p>Cargando cotizaciones...</p>
     </div>
 
-    <!-- Tabla de cotizaciones -->
     <div class="table-container" *ngIf="!isLoading()">
       <div class="table-wrapper">
         <table>
@@ -116,7 +109,7 @@
               </td>
             </tr>
             <tr *ngIf="filtrarCotizaciones().length === 0">
-              <td colspan="7" style="text-align: center; padding: 40px; color: white;">
+              <td colspan="7" class="empty-message">
                 No se encontraron cotizaciones
               </td>
             </tr>
@@ -126,9 +119,7 @@
     </div>
   </div>
 
-  <!-- VISTA: NUEVA COTIZACIÓN -->
   <div class="content-area cotizacion-nueva" *ngIf="vistaActual === 'nueva'">
-    <!-- Botón volver -->
     <div class="action-bar">
       <button class="btn-secondary" (click)="mostrarListaCotizaciones()">
         <span class="material-icons">arrow_back</span>
@@ -137,97 +128,91 @@
     </div>
 
     <div class="cotizacion-grid">
-      <!-- Panel izquierdo: Selección -->
       <div class="panel-seleccion">
-        <!-- Seleccionar Cliente -->
         <div class="seccion-card">
-          <h3 style="color: white;">1. Seleccionar Cliente *</h3>
+          <h3>1. Seleccionar Cliente *</h3>
           <select 
             [(ngModel)]="clienteSeleccionadoId" 
             (change)="seleccionarCliente($any($event.target).value)"
             class="select-cliente"
-            style="color: white; background: rgba(255, 255, 255, 0.15);"
           >
-            <option value="" style="background: #1a4d7a; color: white;">-- Selecciona un cliente --</option>
-            <option *ngFor="let cliente of clientes()" [value]="cliente.id" style="background: #1a4d7a; color: white;">
+            <option value="">-- Selecciona un cliente --</option>
+            <option *ngFor="let cliente of clientes()" [value]="cliente.id">
               {{ cliente.nombre }} - {{ cliente.empresa }}
             </option>
           </select>
 
-          <div class="cliente-info" *ngIf="clienteSeleccionado" style="color: white;">
-            <p style="color: white;"><strong>Cliente:</strong> {{ clienteSeleccionado.nombre }}</p>
-            <p style="color: white;"><strong>Empresa:</strong> {{ clienteSeleccionado.empresa }}</p>
-            <p style="color: white;"><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
+          <div class="cliente-info" *ngIf="clienteSeleccionado">
+            <p><strong>Cliente:</strong> {{ clienteSeleccionado.nombre }}</p>
+            <p><strong>Empresa:</strong> {{ clienteSeleccionado.empresa }}</p>
+            <p><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
           </div>
         </div>
 
-        <!-- Agregar Productos -->
         <div class="seccion-card">
-          <h3 style="color: white;">2. Agregar Productos *</h3>
+          <h3>2. Agregar Productos *</h3>
           <div class="agregar-producto-form">
             <div class="form-group">
-              <label style="color: white;">Producto</label>
+              <label>Producto</label>
               <select 
                 [(ngModel)]="productoSeleccionadoId" 
                 class="select-producto"
-                style="color: white; background: rgba(255, 255, 255, 0.15);"
               >
-                <option value="" style="background: #1a4d7a; color: white;">-- Selecciona un producto --</option>
-                <option *ngFor="let producto of productos()" [value]="producto.id" style="background: #1a4d7a; color: white;">
+                <option value="">-- Selecciona un producto --</option>
+                <option *ngFor="let producto of productos()" [value]="producto.id">
                   {{ producto.nombre }} - ${{ producto.precio.toLocaleString('es-MX') }}
                 </option>
               </select>
             </div>
 
             <div class="form-group cantidad-group">
-              <label style="color: white;">Cantidad</label>
+              <label>Cantidad</label>
               <input 
                 type="number" 
                 [(ngModel)]="cantidadProducto" 
                 min="1"
                 class="input-cantidad"
-                style="color: white; background: rgba(255, 255, 255, 0.15);"
               >
             </div>
 
-            <button 
-              type="button" 
-              class="btn-agregar-producto" 
-              (click)="agregarProductoAlCarrito()"
-              style="position: relative; top: 34px;"
-            >
-              <span class="material-icons">add_shopping_cart</span>
-              Agregar
-            </button>
+            <div class="btn-agregar-wrapper">
+              <button 
+                type="button" 
+                class="btn-agregar-producto" 
+                (click)="agregarProductoAlCarrito()"
+              >
+                <span class="material-icons">add_shopping_cart</span>
+                Agregar
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Panel derecho: Carrito -->
       <div class="panel-carrito">
         <div class="seccion-card carrito-card">
-          <h3 style="color: white;">Carrito de Cotización</h3>
+          <h3>Carrito de Cotización</h3>
 
           <div class="carrito-vacio" *ngIf="carrito().length === 0">
             <span class="material-icons">shopping_cart</span>
-            <p style="color: rgba(255, 255, 255, 0.5);">No hay productos en el carrito</p>
+            <p>No hay productos en el carrito</p>
           </div>
 
           <div class="carrito-lista" *ngIf="carrito().length > 0">
             <div class="carrito-item" *ngFor="let item of carrito(); let i = index">
               <div class="item-info">
-                <h4 style="color: white;">{{ item.nombre }}</h4>
-                <p class="item-detalles" style="color: rgba(255, 255, 255, 0.7);">
+                <h4>{{ item.nombre }}</h4>
+                <p class="item-detalles">
                   <span>Código: {{ item.codigo }}</span>
                   <span>Proveedor: {{ item.proveedor }}</span>
                 </p>
-                <p class="item-precio" style="color: #5dade2;">
+                <p class="item-precio">
                   Precio unitario: ${{ item.precio.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
                 </p>
               </div>
 
               <div class="item-cantidad">
-                <label style="color: rgba(255, 255, 255, 0.7);">Cantidad:</label>
+                <label>Cantidad:</label>
                 <input 
                   type="number" 
                   [value]="item.cantidad" 
@@ -238,8 +223,8 @@
               </div>
 
               <div class="item-subtotal">
-                <p class="subtotal-label" style="color: rgba(255, 255, 255, 0.7);">Subtotal:</p>
-                <p class="subtotal-valor" style="color: #27ae60;">
+                <p class="subtotal-label">Subtotal:</p>
+                <p class="subtotal-valor">
                   ${{ item.subtotal.toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
                 </p>
               </div>
@@ -254,17 +239,15 @@
             </div>
           </div>
 
-          <!-- Total -->
           <div class="carrito-total" *ngIf="carrito().length > 0">
             <div class="total-row">
-              <span class="total-label" style="color: white;">TOTAL:</span>
-              <span class="total-valor" style="color: #27ae60;">
+              <span class="total-label">TOTAL:</span>
+              <span class="total-valor">
                 ${{ calcularTotal().toLocaleString('es-MX', {minimumFractionDigits: 2}) }}
               </span>
             </div>
           </div>
 
-          <!-- Botón generar -->
           <button 
             class="btn-generar-cotizacion" 
             (click)="generarCotizacion()"
@@ -278,7 +261,6 @@
     </div>
   </div>
 
-  <!-- MODAL DETALLE COTIZACIÓN -->
   @if (showDetalleModal() && cotizacionDetalle) {
     <div class="modal-overlay-centered">
       <div class="modal-content-large modal-detalle">
@@ -288,7 +270,6 @@
         </div>
 
         <div class="detalle-content">
-          <!-- Información del cliente -->
           <div class="detalle-seccion">
             <h3>Información del Cliente</h3>
             <div class="info-grid">
@@ -313,7 +294,6 @@
             </div>
           </div>
 
-          <!-- Productos -->
           <div class="detalle-seccion">
             <h3>Productos Cotizados</h3>
             <div class="table-wrapper">
@@ -350,7 +330,6 @@
             </div>
           </div>
 
-          <!-- Acciones -->
           <div class="detalle-acciones">
             <button class="btn-secondary" (click)="cerrarDetalle()">
               Cerrar
@@ -365,7 +344,6 @@
     </div>
   }
 
-  <!-- MODAL CAMBIAR ESTADO -->
   @if (showEstadoModal() && cotizacionAEditar) {
     <div class="modal-overlay-centered">
       <div class="modal-content-estado">
@@ -415,7 +393,6 @@
     </div>
   }
 
-  <!-- MODAL CONFIRMAR ELIMINACIÓN -->
   @if (showConfirmModal()) {
     <div class="modal-overlay-centered">
       <div class="modal-content-warning">

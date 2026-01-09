@@ -258,4 +258,5 @@ export class ProductosComponent implements OnInit {
       reader.readAsDataURL(archivo);
     }
   }
+  
 }

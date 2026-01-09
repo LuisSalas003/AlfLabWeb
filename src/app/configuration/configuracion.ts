@@ -21,6 +21,13 @@ export class ConfiguracionComponent implements OnInit {
   // Tema
   temaActual: string = 'dark';
   
+  // Lógica para ordenar opciones de tema
+  opcionesTema = [
+    { value: 'dark', label: '🌙 Modo Oscuro' },
+    { value: 'light', label: '☀️ Modo Claro' }
+  ];
+  temasOrdenados: any[] = [];
+  
   // Cambio de contraseña
   showModalPassword = signal(false);
   passwordActual: string = '';
@@ -45,27 +52,60 @@ export class ConfiguracionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('ngOnInit ejecutado');
     this.cargarInformacionUsuario();
+    
+    // Obtener tema actual
     this.temaActual = this.themeService.getCurrentTheme();
+    
+    // Ordenar la lista para que el tema actual aparezca primero
+    this.ordenarTemas();
+    
+    console.log('temaActual:', this.temaActual);
   }
 
   cargarInformacionUsuario() {
+    console.log('cargarInformacionUsuario ejecutado');
     const user = this.authService.getCurrentUser();
+    console.log('user:', user);
+    
     if (user) {
       this.userEmail = user.email || 'No disponible';
+      console.log('userEmail asignado:', this.userEmail);
       
-      // Intentar obtener más info de localStorage
       const userData = this.authService.getUserData();
+      console.log('userData:', userData);
       this.userName = userData?.username || this.userEmail.split('@')[0];
+      console.log('userName asignado:', this.userName);
+    } else {
+      console.log('No hay usuario autenticado');
     }
   }
 
   // Cambiar tema
   cambiarTema(event: any) {
     const nuevoTema = event.target.value;
+    
+    // 1. Aplicar el tema
     this.themeService.applyTheme(nuevoTema);
     this.temaActual = nuevoTema;
+    
+    // 2. Reordenar la lista para reflejar el cambio en el select
+    this.ordenarTemas();
+    
     this.mostrarMensajeExito('Tema actualizado correctamente');
+  }
+
+  // Función auxiliar para mantener la opción seleccionada al principio
+  ordenarTemas() {
+    const seleccionado = this.opcionesTema.find(t => t.value === this.temaActual);
+    const otros = this.opcionesTema.filter(t => t.value !== this.temaActual);
+    
+    if (seleccionado) {
+      this.temasOrdenados = [seleccionado, ...otros];
+    } else {
+      this.temasOrdenados = [...this.opcionesTema];
+    }
   }
 
   // Abrir modal de cambio de contraseña

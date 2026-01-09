@@ -1,5 +1,4 @@
 <div class="main-wrapper">
-  <!-- Encabezado -->
   <div class="top-header">
     <button class="menu-button" (click)="toggleMenu()">
       <span class="material-symbols-outlined">dehaze</span>
@@ -7,7 +6,6 @@
     <h1>Configuración</h1>
   </div>
 
-  <!-- Menú lateral -->
   <div class="sidebar-menu" [class.open]="menuAbierto">
     <div class="menu-header">
       <h2>Menú</h2>
@@ -49,18 +47,14 @@
     </nav>
   </div>
 
-  <!-- Overlay del menú -->
   <div class="menu-overlay" *ngIf="menuAbierto" (click)="toggleMenu()"></div>
 
-  <!-- Contenido principal -->
   <div class="content-area config-container">
     
-    <!-- Mensaje de éxito global -->
     <div class="mensaje-exito" *ngIf="mensajeExito">
       {{ mensajeExito }}
     </div>
 
-    <!-- Card: Información del usuario -->
     <div class="config-card">
       <div class="card-header">
         <span class="material-icons">account_circle</span>
@@ -78,7 +72,6 @@
       </div>
     </div>
 
-    <!-- Card: Apariencia -->
     <div class="config-card">
       <div class="card-header">
         <span class="material-icons">palette</span>
@@ -95,14 +88,14 @@
             [(ngModel)]="temaActual" 
             (change)="cambiarTema($event)"
           >
-            <option value="dark">🌙 Modo Oscuro</option>
-            <option value="light">☀️ Modo Claro</option>
+            <option *ngFor="let tema of temasOrdenados" [value]="tema.value">
+              {{ tema.label }}
+            </option>
           </select>
         </div>
       </div>
     </div>
 
-    <!-- Card: Seguridad -->
     <div class="config-card">
       <div class="card-header">
         <span class="material-icons">security</span>
@@ -122,7 +115,6 @@
       </div>
     </div>
 
-    <!-- Card: Sesión -->
     <div class="config-card">
       <div class="card-header">
         <span class="material-icons">logout</span>
@@ -144,7 +136,6 @@
 
   </div>
 
-  <!-- MODAL CAMBIAR CONTRASEÑA -->
   @if (showModalPassword()) {
     <div class="modal-overlay-centered">
       <div class="modal-content-password">
@@ -155,17 +146,14 @@
 
         <form class="password-form" (ngSubmit)="cambiarPassword()">
           
-          <!-- Mensaje de error -->
           <div class="mensaje-error" *ngIf="mensajeError">
             {{ mensajeError }}
           </div>
 
-          <!-- Mensaje de éxito -->
           <div class="mensaje-exito" *ngIf="mensajeExito">
             {{ mensajeExito }}
           </div>
 
-          <!-- Contraseña actual -->
           <div class="form-group">
             <label>Contraseña Actual *</label>
             <div class="password-input-wrapper">
@@ -189,7 +177,6 @@
             </div>
           </div>
 
-          <!-- Nueva contraseña -->
           <div class="form-group">
             <label>Nueva Contraseña *</label>
             <div class="password-input-wrapper">
@@ -213,7 +200,6 @@
             </div>
           </div>
 
-          <!-- Confirmar contraseña -->
           <div class="form-group">
             <label>Confirmar Nueva Contraseña *</label>
             <div class="password-input-wrapper">

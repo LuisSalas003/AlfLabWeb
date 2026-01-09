@@ -34,7 +34,7 @@
 }
 
 .seccion-card h3 {
-  color: white;
+  color: white; /* Por defecto (Oscuro) */
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 10px;
@@ -48,9 +48,9 @@
   padding: 12px 15px;
   border: none;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15); /* Fondo oscuro */
   backdrop-filter: blur(10px);
-  color: white;
+  color: white; /* Texto oscuro */
   font-size: 15px;
   outline: none;
   transition: all 0.3s ease;
@@ -140,7 +140,7 @@
 .btn-agregar-wrapper {
   display: flex;
   align-items: flex-end;
-  margin-top: 26px;
+  margin-top: 34px; /* Ajuste para alinear con los inputs */
 }
 
 .btn-agregar-producto {
@@ -192,7 +192,6 @@
   vertical-align: middle;
 }
 
-
 /* Carrito */
 .carrito-card {
   min-height: 500px;
@@ -216,6 +215,7 @@
 
 .carrito-vacio p {
   font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .carrito-lista {
@@ -439,7 +439,7 @@
   border: 1px solid #e74c3c;
 }
 
-/* Botón view */
+/* Botones de acción */
 .btn-view {
   background: transparent;
   border: none;
@@ -457,11 +457,6 @@
   background: rgba(52, 152, 219, 0.2);
 }
 
-.btn-view .material-icons {
-  font-size: 20px;
-}
-
-/* Botón edit */
 .btn-edit {
   background: transparent;
   border: none;
@@ -479,8 +474,11 @@
   background: rgba(243, 156, 18, 0.2);
 }
 
-.btn-edit .material-icons {
-  font-size: 20px;
+/* Mensaje vacío en tabla */
+.empty-message {
+  text-align: center;
+  padding: 40px;
+  color: white;
 }
 
 /* Modal detalle */
@@ -575,172 +573,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .cotizacion-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .panel-carrito {
-    order: 2;
-  }
-}
-
-@media (max-width: 768px) {
-  .agregar-producto-form {
-    grid-template-columns: 1fr;
-  }
-
-  .cantidad-group {
-    width: 100%;
-  }
-
-  .carrito-item {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .item-cantidad,
-  .item-subtotal {
-    text-align: left;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .tabla-detalle {
-    font-size: 11px;
-  }
-
-  .tabla-detalle th,
-  .tabla-detalle td {
-    padding: 8px;
-  }
-}
-
-/* Estilos de impresión */
-@media print {
-  .top-header,
-  .sidebar-menu,
-  .action-bar,
-  .modal-header,
-  .detalle-acciones {
-    display: none !important;
-  }
-
-  .modal-overlay-centered {
-    position: static;
-    background: white;
-  }
-
-  .modal-content-large {
-    box-shadow: none;
-    max-width: 100%;
-  }
-
-  .detalle-content {
-    color: black;
-  }
-
-  .tabla-detalle th,
-  .tabla-detalle td {
-    color: black;
-    border-color: black;
-  }
-}
-
-/* Asegurar que los títulos sean visibles */
-.seccion-card h3 {
-  color: white !important;
-  font-size: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid rgba(52, 152, 219, 0.5);
-}
-
-/* Labels visibles */
-.form-group label,
-.setting-info label,
-.setting-label {
-  color: white !important;
-  font-weight: 600;
-}
-
-/* Select visibles */
-.select-cliente,
-.select-producto {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-}
-
-.select-cliente option,
-.select-producto option {
-  background: #1a4d7a !important;
-  color: white !important;
-}
-
-/* Info del cliente visible */
-.cliente-info p {
-  color: white !important;
-}
-
-.cliente-info strong {
-  color: #5dade2 !important;
-}
-
-/* Carrito */
-.carrito-item h4 {
-  color: white !important;
-}
-
-.item-detalles {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-/* TEMA CLARO - Textos oscuros */
-body[data-theme="light"] .seccion-card h3 {
-  color: #2c3e50 !important;
-}
-
-body[data-theme="light"] .form-group label,
-body[data-theme="light"] .setting-label {
-  color: #2c3e50 !important;
-}
-
-body[data-theme="light"] .select-cliente,
-body[data-theme="light"] .select-producto {
-  color: #2c3e50 !important;
-  background: rgba(52, 73, 94, 0.1) !important;
-}
-
-body[data-theme="light"] .cliente-info p {
-  color: #2c3e50 !important;
-}
-
-body[data-theme="light"] .carrito-item h4 {
-  color: #2c3e50 !important;
-}
-
-body[data-theme="light"] .item-detalles {
-  color: #7f8c8d !important;
-}
-
-/* Centrar botón volver en la vista nueva cotización */
-.cotizacion-nueva .action-bar {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.content-area {
-  max-width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: calc(100vh - 80px);
-  padding: 20px;
-}
-
 /* Modal cambiar estado */
 .modal-content-estado {
   background: linear-gradient(135deg, #1a4d7a 0%, #0a2342 100%);
@@ -822,4 +654,175 @@ body[data-theme="light"] .item-detalles {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .cotizacion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-carrito {
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .agregar-producto-form {
+    grid-template-columns: 1fr;
+  }
+
+  .cantidad-group {
+    width: 100%;
+  }
+
+  .carrito-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .item-cantidad,
+  .item-subtotal {
+    text-align: left;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabla-detalle {
+    font-size: 11px;
+  }
+
+  .tabla-detalle th,
+  .tabla-detalle td {
+    padding: 8px;
+  }
+}
+
+/* Estilos de impresión */
+@media print {
+  .top-header,
+  .sidebar-menu,
+  .action-bar,
+  .modal-header,
+  .detalle-acciones {
+    display: none !important;
+  }
+
+  .modal-overlay-centered {
+    position: static;
+    background: white;
+  }
+
+  .modal-content-large {
+    box-shadow: none;
+    max-width: 100%;
+  }
+
+  .detalle-content {
+    color: black;
+  }
+
+  .tabla-detalle th,
+  .tabla-detalle td {
+    color: black;
+    border-color: black;
+  }
+}
+
+/* =============================================
+   TEMA CLARO (LIGHT MODE)
+   Sobrescribe los colores blancos por oscuros
+   =============================================
+*/
+
+body[data-theme="light"] .seccion-card {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .seccion-card h3 {
+  color: #2c3e50; /* Título oscuro */
+}
+
+body[data-theme="light"] .form-group label,
+body[data-theme="light"] .item-cantidad label {
+  color: #2c3e50; /* Label oscuro */
+}
+
+/* Inputs y Selects en modo claro */
+body[data-theme="light"] .select-cliente,
+body[data-theme="light"] .select-producto,
+body[data-theme="light"] .input-cantidad,
+body[data-theme="light"] .input-cantidad-small {
+  background: rgba(0, 0, 0, 0.05); /* Fondo gris muy suave */
+  color: #2c3e50; /* Texto oscuro */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .select-cliente option,
+body[data-theme="light"] .select-producto option {
+  background: white;
+  color: #2c3e50;
+}
+
+/* Información del Cliente (Caja Azul) */
+body[data-theme="light"] .cliente-info {
+  background: rgba(52, 152, 219, 0.1);
+}
+
+body[data-theme="light"] .cliente-info p {
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .cliente-info strong {
+  color: #2980b9; /* Azul más oscuro */
+}
+
+/* Carrito y Textos Varios */
+body[data-theme="light"] .carrito-vacio p,
+body[data-theme="light"] .carrito-vacio .material-icons {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="light"] .item-info h4 {
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .item-detalles,
+body[data-theme="light"] .subtotal-label {
+  color: #7f8c8d; /* Gris medio */
+}
+
+body[data-theme="light"] .total-label {
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .empty-message {
+  color: #7f8c8d;
+}
+
+/* Scrollbar en modo claro */
+body[data-theme="light"] .carrito-lista::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Botón secundario (Volver) */
+body[data-theme="light"] .btn-secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: #2c3e50;
+}
+
+body[data-theme="light"] .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Item del carrito (fondo) */
+body[data-theme="light"] .carrito-item {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body[data-theme="light"] .carrito-item:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
