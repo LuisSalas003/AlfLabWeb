@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../services/theme.service';
-import { Auth, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from '@angular/fire/auth';
+// Importamos onAuthStateChanged para detectar si el usuario llega tarde (F5)
+import { Auth, updatePassword, EmailAuthProvider, reauthenticateWithCredential, onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-configuracion',
@@ -20,13 +21,6 @@ export class ConfiguracionComponent implements OnInit {
   
   // Tema
   temaActual: string = 'dark';
-  
-  // Lógica para ordenar opciones de tema
-  opcionesTema = [
-    { value: 'dark', label: '🌙 Modo Oscuro' },
-    { value: 'light', label: '☀️ Modo Claro' }
-  ];
-  temasOrdenados: any[] = [];
   
   // Cambio de contraseña
   showModalPassword = signal(false);
@@ -53,17 +47,24 @@ export class ConfiguracionComponent implements OnInit {
 
   ngOnInit() {
     console.log('ngOnInit ejecutado');
+    
+    // 1. Intentamos cargar inmediatamente (Tu lógica original)
     this.cargarInformacionUsuario();
     
+    // 2. CORRECCIÓN: Si diste F5, esperamos a que Firebase conecte y volvemos a cargar
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // Si detectamos al usuario un momento después, actualizamos la info
+        this.cargarInformacionUsuario();
+      }
+    });
+
     // Obtener tema actual
     this.temaActual = this.themeService.getCurrentTheme();
-    
-    // Ordenar la lista para que el tema actual aparezca primero
-    this.ordenarTemas();
-    
     console.log('temaActual:', this.temaActual);
   }
 
+  // Tu función original intacta
   cargarInformacionUsuario() {
     console.log('cargarInformacionUsuario ejecutado');
     const user = this.authService.getCurrentUser();
@@ -82,30 +83,11 @@ export class ConfiguracionComponent implements OnInit {
     }
   }
 
-  // Cambiar tema
-  cambiarTema(event: any) {
-    const nuevoTema = event.target.value;
-    
-    // 1. Aplicar el tema
+  // NUEVA LÓGICA: Botones de tema
+  seleccionarTema(nuevoTema: string) {
     this.themeService.applyTheme(nuevoTema);
     this.temaActual = nuevoTema;
-    
-    // 2. Reordenar la lista para reflejar el cambio en el select
-    this.ordenarTemas();
-    
     this.mostrarMensajeExito('Tema actualizado correctamente');
-  }
-
-  // Función auxiliar para mantener la opción seleccionada al principio
-  ordenarTemas() {
-    const seleccionado = this.opcionesTema.find(t => t.value === this.temaActual);
-    const otros = this.opcionesTema.filter(t => t.value !== this.temaActual);
-    
-    if (seleccionado) {
-      this.temasOrdenados = [seleccionado, ...otros];
-    } else {
-      this.temasOrdenados = [...this.opcionesTema];
-    }
   }
 
   // Abrir modal de cambio de contraseña
@@ -195,14 +177,12 @@ export class ConfiguracionComponent implements OnInit {
     }
   }
 
-  // Cerrar sesión
   async cerrarSesion() {
     if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
       await this.authService.logout();
     }
   }
 
-  // Mensajes
   mostrarMensajeExito(mensaje: string) {
     this.mensajeExito = mensaje;
     setTimeout(() => {
@@ -221,7 +201,6 @@ export class ConfiguracionComponent implements OnInit {
     this.menuAbierto = !this.menuAbierto;
   }
 
-  // Toggle visibilidad de contraseñas
   togglePasswordActual() {
     this.mostrarPasswordActual = !this.mostrarPasswordActual;
   }

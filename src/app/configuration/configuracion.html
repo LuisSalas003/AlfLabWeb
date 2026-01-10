@@ -32,10 +32,6 @@
         <span class="material-icons">description</span>
         Cotizaciones
       </a>
-      <a routerLink="/reportes" class="menu-item">
-        <span class="material-icons">assessment</span>
-        Reportes
-      </a>
       <a routerLink="/configuracion" class="menu-item active">
         <span class="material-icons">settings</span>
         Configuración
@@ -83,15 +79,24 @@
             <label class="setting-label">Tema de la aplicación</label>
             <p class="setting-description">Cambia entre modo claro y oscuro</p>
           </div>
-          <select 
-            class="theme-select" 
-            [(ngModel)]="temaActual" 
-            (change)="cambiarTema($event)"
-          >
-            <option *ngFor="let tema of temasOrdenados" [value]="tema.value">
-              {{ tema.label }}
-            </option>
-          </select>
+          
+          <div class="theme-toggle-group">
+            <button 
+              class="theme-btn" 
+              [class.active]="temaActual === 'dark'"
+              (click)="seleccionarTema('dark')"
+            >
+              🌙 Oscuro
+            </button>
+            <button 
+              class="theme-btn" 
+              [class.active]="temaActual === 'light'"
+              (click)="seleccionarTema('light')"
+            >
+              ☀️ Claro
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
